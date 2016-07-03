@@ -36,7 +36,7 @@ var myApp = angular.module('btApp', ['ionic', 'firebase', 'ngCordova']).constant
     .state('app', {
       url: '/app',
       templateUrl: 'templates/app.html',
-      controller: 'LoginController',
+      controller: 'AppController',
       resolve: {
         currentAuth: function (Authentication) {
           return Authentication.requireAuth()
@@ -136,5 +136,16 @@ myApp.controller('RegisterController', ['$scope', '$http', 'Authentication', fun
     } else {
       $scope.message = 'Invalid registration information.'
     }
+  }
+}])
+
+myApp.controller('AppController', ['$scope', 'Authentication', '$http', '$rootScope', '$firebaseAuth', '$firebaseArray', 'FIREBASE_URL', function ($scope, Authentication, $http, $rootScope, $firebaseAuth, $firebaseArray, FIREBASE_URL) {
+  $rootScope.data = {
+    budget: 0,
+    expense: 0,
+    message: null
+  }
+  $scope.logout = function () {
+    Authentication.logout()
   }
 }])

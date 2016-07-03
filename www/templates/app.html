@@ -2,14 +2,34 @@
   <ion-nav-buttons side="right">
     <a class="button button-clear icon icon-top ion-power" ng-show="currentUser" ng-click="logout()" href="#/">Logout</a>
   </ion-nav-buttons>
-  <ion-content class="padding has-subheader" ng-controller="LoginController">
-    <div class="list list-inset"  ng-show="data.message">
-      <div class="item item-word-wrap item-icon-left">
+  <ion-content class="padding has-subheader" ng-controller="AppController">
+    <div class="list" ng-show="data.message">
+      <div class="item item-word-wrap item-icon-left" >
         <i class="icon ion-information-circled"></i>
         <p class="attention">{{data.message}}</p>
       </div>
-    </div>
-    
+      
+      <div class="item item-divider">
+        Budget
+        <span class="item-note">Expense</span>
+      </div>
+      <div class="item">
+        {{data.budget | currency:"USD$"}}
+        <span class="item-note">{{data.expense | currency:"USD$"}}</span>
+      </div>
+
+      <div class="item item-divider">
+        D3.JS graphic bar here
+      </div>
+
+      <div class="item item-divider item-icon-right">
+        Category
+        <i class="icon ion-social-usd"></i>
+      </div>
+
+    </div> <!-- end of list -->
+
+
   </ion-content>
 </ion-view>
 

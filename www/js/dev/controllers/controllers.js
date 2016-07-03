@@ -18,3 +18,14 @@ myApp.controller('RegisterController', ['$scope', '$http', 'Authentication', fun
     }
   }
 }])
+
+myApp.controller('AppController', ['$scope', 'Authentication', '$http', '$rootScope', '$firebaseAuth', '$firebaseArray', 'FIREBASE_URL', function ($scope, Authentication, $http, $rootScope, $firebaseAuth, $firebaseArray, FIREBASE_URL) {
+  $rootScope.data = {
+    budget: 0,
+    expense: 0,
+    message: null
+  }
+  $scope.logout = function () {
+    Authentication.logout()
+  }
+}])

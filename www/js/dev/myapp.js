@@ -36,7 +36,7 @@ var myApp = angular.module('btApp', ['ionic', 'firebase', 'ngCordova']).constant
     .state('app', {
       url: '/app',
       templateUrl: 'templates/app.html',
-      controller: 'LoginController',
+      controller: 'AppController',
       resolve: {
         currentAuth: function (Authentication) {
           return Authentication.requireAuth()
