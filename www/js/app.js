@@ -229,4 +229,5 @@ myApp.controller('AppController', ['$scope', 'Authentication', '$http', '$rootSc
   $scope.expense = function () {
     Authentication.expense()
   }
+
 }])
