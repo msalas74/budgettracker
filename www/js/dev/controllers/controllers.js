@@ -23,9 +23,37 @@ myApp.controller('AppController', ['$scope', 'Authentication', '$http', '$rootSc
   $rootScope.data = {
     budget: 0,
     expense: 0,
-    message: null
+    message: null,
+    balance: 100,
+    items: [
+      {
+        'category': 'Groceries',
+        'cost': 250
+      },
+      {
+        'category': 'Eating Out',
+        'cost': 50
+      },
+      {
+        'category': 'Gas',
+        'cost': 40
+      },
+      {
+        'category': 'Shopping',
+        'cost': 120
+      }
+    ]
   }
   $scope.logout = function () {
     Authentication.logout()
+  }
+  $scope.showGraph = function () {
+    Authentication.showGraph()
+  }
+  $scope.income = function () {
+    Authentication.income()
+  }
+  $scope.expense = function () {
+    Authentication.expense()
   }
 }])

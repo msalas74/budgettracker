@@ -3,8 +3,8 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-var myApp = angular.module('btApp', ['ionic', 'firebase', 'ngCordova']).constant('FIREBASE_URL', 'https://bt01.firebaseio.com/')
-
+var myApp = angular.module('btApp', ['ionic', 'firebase', 'ngCordova'])
+.constant('FIREBASE_URL', 'https://bt01.firebaseio.com/')
 .run(function ($ionicPlatform) {
   $ionicPlatform.ready(function () {
     if (window.cordova && window.cordova.plugins.Keyboard) {
@@ -36,6 +36,46 @@ var myApp = angular.module('btApp', ['ionic', 'firebase', 'ngCordova']).constant
     .state('app', {
       url: '/app',
       templateUrl: 'templates/app.html',
+      controller: 'AppController',
+      resolve: {
+        currentAuth: function (Authentication) {
+          return Authentication.requireAuth()
+        }
+      }
+    })
+    .state('expense', {
+      url: '/expense',
+      templateUrl: 'templates/expense.html',
+      controller: 'AppController',
+      resolve: {
+        currentAuth: function (Authentication) {
+          return Authentication.requireAuth()
+        }
+      }
+    })
+    .state('income', {
+      url: '/income',
+      templateUrl: 'templates/income.html',
+      controller: 'AppController',
+      resolve: {
+        currentAuth: function (Authentication) {
+          return Authentication.requireAuth()
+        }
+      }
+    })
+    .state('category', {
+      url: '/category',
+      templateUrl: 'templates/category.html',
+      controller: 'AppController',
+      resolve: {
+        currentAuth: function (Authentication) {
+          return Authentication.requireAuth()
+        }
+      }
+    })
+    .state('infographic', {
+      url: '/infographic',
+      templateUrl: 'templates/infographic.html',
       controller: 'AppController',
       resolve: {
         currentAuth: function (Authentication) {

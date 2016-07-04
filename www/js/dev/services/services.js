@@ -62,7 +62,20 @@ myApp.factory('Authentication', ['$rootScope', '$location', '$firebaseAuth', '$f
       }).catch(function (error) {
         $rootScope.data.message = error.message
       })
+    },
+    showGraph: function () {
+      $ionicNavBarDelegate.showBackButton(true)
+      $location.path('/infographic')
+    },
+    income: function () {
+      $ionicNavBarDelegate.showBackButton(true)
+      $location.path('/income')
+    },
+    expense: function () {
+      $ionicNavBarDelegate.showBackButton(true)
+      $location.path('/expense')
     }
+
   }
 
   return authObj

@@ -1,1 +1,9 @@
 /* Empty. Add your own CSS if you like */
+.bar-footer .title {
+  font-size: 80px;
+  height: 100px;
+}
+
+.bar-footer {
+  margin-bottom: 50px;
+}

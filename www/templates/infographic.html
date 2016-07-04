@@ -1,4 +1,4 @@
-<ion-view  view-title="My Budget Tracker">
+<ion-view  view-title="Infographic">
   <ion-nav-buttons side="right">
     <a class="button button-clear icon icon-top ion-power" ng-show="currentUser" ng-click="logout()" href="#/">Logout</a>
   </ion-nav-buttons>
@@ -26,24 +26,10 @@
         Category
         <i class="icon ion-social-usd"></i>
       </div>
-      <div class="item">
-        <div class="item" ng-repeat="item in data.items">
-          {{item.category}}
-          <span class="item-note">{{item.cost | currency:"USD$"}}</span>
-        </div>
-      </div>
-      <div class="item item-divider">
-        BALANCE
-        <span class="item-note">{{data.balance | currency: "USD$"}}</span>
-      </div>
 
     </div> <!-- end of list -->
 
+
   </ion-content>
-  <div class="bar bar-footer" ng-controller="AppController">
-    <button class="button button-large button-balanced" ng-click="income()">Income</button>
-    <h1 class="title" ng-click="showGraph()"><i class="icon ion-ios-pie"></i></h1>
-    <button class="button button-large button-assertive" ng-click="expense()">Expense</button>
-  </div>
 </ion-view>
 
