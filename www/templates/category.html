@@ -1,5 +1,11 @@
 <ion-view  view-title="Category">
   <ion-content class="padding" ng-controller="AppController">
+    <h2>{{data.category}}</h2>
+    <label>
+      <div class="input-label">Category</div>
+      <input type="text" ng-model="data.selectedcategory" ng-required="true">
+    </label>
+
     <div class="list">
       <div class="item item-word-wrap item-icon-left" ng-show="data.message">
         <i class="icon ion-information-circled"></i>

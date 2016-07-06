@@ -1,27 +1,33 @@
-<ion-view  view-title="Income">
-  <ion-content class="padding" ng-controller="AppController">
+<ion-view  view-title="Income" ng-controller="CategoryController">
+  <ion-nav-buttons side="right">
+    <button class="button button-clear icon icon-top ion-gear-b" ng-show="currentUser" ng-click="showCategoryModal('Income')"></button>
+  </ion-nav-buttons>
+  <ion-content class="padding">
     <div class="list">
       <div class="item item-word-wrap item-icon-left" ng-show="data.message" >
         <i class="icon ion-information-circled"></i>
         <p class="attention">{{data.message}}</p>
       </div>
       
-      <div class="item item-divider">
-        Budget
-        <span class="item-note">Expense</span>
-      </div>
       <div class="item">
-        {{data.budget | currency:"USD$"}}
-        <span class="item-note">{{data.expense | currency:"USD$"}}</span>
-      </div>
+        <form name="incomeForm" novalidate>
+          <label class="item item-input item-select">
+            <div class="input-label">Category</div>
+            <select name="category" ng-model="data.selectedcategory" ng-required="true">
+              <option value="{{category}}" ng-repeat="category in data.categories">{{category}}</option>
+            </select>
+          </label>
 
-      <div class="item item-divider">
-        D3.JS graphic bar here
-      </div>
-
-      <div class="item item-divider item-icon-right">
-        Category
-        <i class="icon ion-social-usd"></i>
+          <ion-item class="item item-input">
+            <span class="input-label">Cost</span>
+            <input type="number" name="income" placeholder="00.00" ng-model="data.income" ng-required="true">
+          </ion-item>
+          <p class="item item-text-wrap item-assertive" ng-show="myform.income.$invalid && myform.income.$touched">Please provide a cost value.</p>
+          
+          <button type="submit" class="button button-block button-dark"
+           ng-disabled="myform.$invalid">Submit</button>
+            
+        </form>
       </div>
 
     </div> <!-- end of list -->

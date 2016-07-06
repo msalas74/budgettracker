@@ -1,0 +1,18 @@
+<ion-modal-view>
+  <ion-header-bar class="bar bar-header bar-dark">
+    <h1 class="title">{{data.listTitle}} List</h1>
+    <button class="icon ion-close-circled button button-clear button-assertive" ng-click="modal.hide()"></button>
+  </ion-header-bar>
+  <ion-content class="padding">
+    <div class="item">
+        <div class="item" ng-repeat="item in data.incomeList">
+          <button class="button button-clear button-dark">
+            <i class="icon ion-information-circled"></i>
+             {{item.category}}
+          </button>
+          
+          <span class="item-note">{{item.value | currency:"USD$"}}</span>
+        </div>
+      </div>
+  </ion-content>
+</ion-modal-view>

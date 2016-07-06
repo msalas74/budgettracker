@@ -1,9 +1,16 @@
 /* Empty. Add your own CSS if you like */
 .bar-footer .title {
-  font-size: 80px;
-  height: 100px;
+  font-size: 40px;
 }
 
 .bar-footer {
-  margin-bottom: 50px;
+  padding-bottom: 60px;
+}
+
+.item-icon-left .icon, .item-icon-right .icon {
+  font-size: 16px;
+}
+
+.footer-button {
+  max-height: 31px;
 }

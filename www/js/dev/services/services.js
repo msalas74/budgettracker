@@ -1,4 +1,4 @@
-myApp.factory('Authentication', ['$rootScope', '$location', '$firebaseAuth', '$firebaseObject', 'FIREBASE_URL' ,'$ionicNavBarDelegate', function ($rootScope, $location, $firebaseAuth, $firebaseObject, FIREBASE_URL, $ionicNavBarDelegate) {
+myApp.factory('Authentication', ['$rootScope', '$location', '$firebaseAuth', '$firebaseObject', 'FIREBASE_URL', '$ionicNavBarDelegate', '$ionicHistory', function ($rootScope, $location, $firebaseAuth, $firebaseObject, FIREBASE_URL, $ionicNavBarDelegate, $ionicHistory) {
   var ref = new Firebase(FIREBASE_URL)
   var auth = $firebaseAuth(ref)
 
@@ -30,6 +30,9 @@ myApp.factory('Authentication', ['$rootScope', '$location', '$firebaseAuth', '$f
           $ionicNavBarDelegate.showBackButton(false)
           $location.path('/app')
           $rootScope.data.message = 'You are currently logged in.'
+          $ionicHistory.nextViewOptions({
+            disableBack: true
+          })
         }).catch(function (error) {
           $rootScope.data.message = error.message
         })
@@ -45,6 +48,7 @@ myApp.factory('Authentication', ['$rootScope', '$location', '$firebaseAuth', '$f
       return auth.$requireAuth()
     },
     register: function (user) {
+      $ionicNavBarDelegate.showBackButton(true)
       auth.$createUser({
         email: user.email,
         password: user.password
@@ -75,7 +79,6 @@ myApp.factory('Authentication', ['$rootScope', '$location', '$firebaseAuth', '$f
       $ionicNavBarDelegate.showBackButton(true)
       $location.path('/expense')
     }
-
   }
 
   return authObj

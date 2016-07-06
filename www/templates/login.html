@@ -22,12 +22,21 @@
           </label>
           <p class="item item-text-wrap item-assertive" ng-show="myform.password.$invalid && myform.password.$touched">Password must be at least 8 characters long.</p>
         
-
-        <button class="button button-block button-dark" type="submit" 
-        ng-disabled="myform.email.$invalid || myform.password.$invalid">Sign In</button>
+        <div class="row">
+          <div class="col col-33 col-offset-33">
+            <button class="button button-block button-dark" type="submit" 
+            ng-disabled="myform.email.$invalid || myform.password.$invalid">$ign In</button>
+          </div>
+        </div>
+        
       </div>
     </form>
-    <a class="button button-block button-energized" href="#/register">Register New User</a>
+    <div class="row">
+      <div class="col col-33 col-offset-33">
+        <a class="button button-block button-energized" href="#/register">$ign up</a>
+      </div>
+    </div>
+    
   </ion-content>
 </ion-view>
 

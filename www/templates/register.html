@@ -22,8 +22,13 @@
             <input type="password" name="password" placeholder="Password" ng-model="user.password" ng-required="true" ng-minlength="8">
           </label>
           <p class="item item-text-wrap item-assertive" ng-show="myform.password.$invalid && myform.password.$touched">Passwords must have at least 8 characters.</p>
-
-          <button class="button button-block button-dark" type="submit" ng-disabled="myform.username.$invalid || myform.email.$invalid || myform.password.$invalid">Sign Up</button>
+          
+          <div class="row">
+            <div class="col col-33 col-offset-33">
+              <button class="button button-block button-dark" type="submit" ng-disabled="myform.username.$invalid || myform.email.$invalid || myform.password.$invalid">$ign Up</button>
+            </div>
+          </div>
+          
 
         </div>  <!-- end of list -->
       </form>
