@@ -27,9 +27,10 @@ myApp.factory('Authentication', ['$rootScope', '$location', '$firebaseAuth', '$f
           email: user.email,
           password: user.password
         }).then(function (regUser) {
-          $ionicNavBarDelegate.showBackButton(false)
+          //  $ionicNavBarDelegate.showBackButton(false)
           $location.path('/app')
           $rootScope.data.message = 'You are currently logged in.'
+          //  Prevent back navigation button to appear in the main application view
           $ionicHistory.nextViewOptions({
             disableBack: true
           })
@@ -48,7 +49,7 @@ myApp.factory('Authentication', ['$rootScope', '$location', '$firebaseAuth', '$f
       return auth.$requireAuth()
     },
     register: function (user) {
-      $ionicNavBarDelegate.showBackButton(true)
+      //  $ionicNavBarDelegate.showBackButton(true)
       auth.$createUser({
         email: user.email,
         password: user.password
@@ -68,15 +69,15 @@ myApp.factory('Authentication', ['$rootScope', '$location', '$firebaseAuth', '$f
       })
     },
     showGraph: function () {
-      $ionicNavBarDelegate.showBackButton(true)
+      //  $ionicNavBarDelegate.showBackButton(true)
       $location.path('/infographic')
     },
     income: function () {
-      $ionicNavBarDelegate.showBackButton(true)
+      //  $ionicNavBarDelegate.showBackButton(true)
       $location.path('/income')
     },
     expense: function () {
-      $ionicNavBarDelegate.showBackButton(true)
+      //  $ionicNavBarDelegate.showBackButton(true)
       $location.path('/expense')
     }
   }

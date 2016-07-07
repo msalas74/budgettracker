@@ -116,9 +116,10 @@ myApp.factory('Authentication', ['$rootScope', '$location', '$firebaseAuth', '$f
           email: user.email,
           password: user.password
         }).then(function (regUser) {
-          $ionicNavBarDelegate.showBackButton(false)
+          //  $ionicNavBarDelegate.showBackButton(false)
           $location.path('/app')
           $rootScope.data.message = 'You are currently logged in.'
+          //  Prevent back navigation button to appear in the main application view
           $ionicHistory.nextViewOptions({
             disableBack: true
           })
@@ -137,7 +138,7 @@ myApp.factory('Authentication', ['$rootScope', '$location', '$firebaseAuth', '$f
       return auth.$requireAuth()
     },
     register: function (user) {
-      $ionicNavBarDelegate.showBackButton(true)
+      //  $ionicNavBarDelegate.showBackButton(true)
       auth.$createUser({
         email: user.email,
         password: user.password
@@ -157,15 +158,15 @@ myApp.factory('Authentication', ['$rootScope', '$location', '$firebaseAuth', '$f
       })
     },
     showGraph: function () {
-      $ionicNavBarDelegate.showBackButton(true)
+      //  $ionicNavBarDelegate.showBackButton(true)
       $location.path('/infographic')
     },
     income: function () {
-      $ionicNavBarDelegate.showBackButton(true)
+      //  $ionicNavBarDelegate.showBackButton(true)
       $location.path('/income')
     },
     expense: function () {
-      $ionicNavBarDelegate.showBackButton(true)
+      //  $ionicNavBarDelegate.showBackButton(true)
       $location.path('/expense')
     }
   }
@@ -203,28 +204,22 @@ myApp.controller('AppController', ['$scope', '$ionicModal', 'Authentication', '$
     balance: 100,
     modalCategory: '',
     listTitle: '',
-    categories: [
-      'Groceries',
-      'Eating Out',
-      'Gas',
-      'Shopping'
-    ],
     items: [
       {
         'category': 'Groceries',
-        'cost': 250
+        'value': 250
       },
       {
         'category': 'Eating Out',
-        'cost': 50
+        'value': 50
       },
       {
         'category': 'Gas',
-        'cost': 40
+        'value': 40
       },
       {
         'category': 'Shopping',
-        'cost': 120
+        'value': 120
       }
     ],
     incomeList: [
@@ -236,7 +231,30 @@ myApp.controller('AppController', ['$scope', '$ionicModal', 'Authentication', '$
         'category': 'Freelance',
         'value': 1000
       }
-    ]
+    ],
+    expenseList: [
+      {
+        'category': 'Groceries',
+        'value': 100
+      },
+      {
+        'category': 'Groceries',
+        'value': 150
+      },
+      {
+        'category': 'Eating Out',
+        'value': 50
+      },
+      {
+        'category': 'Gas',
+        'value': 40
+      },
+      {
+        'category': 'Shopping',
+        'value': 120
+      }
+    ],
+    itemsList: []
   }
 
   $scope.logout = function () {
@@ -253,6 +271,8 @@ myApp.controller('AppController', ['$scope', '$ionicModal', 'Authentication', '$
   }
   $scope.showModal = function (title) {
     $scope.data.listTitle = title
+    title = title.toLowerCase()
+    $rootScope.data.itemsList = $rootScope.data[title + 'List']
     $scope.modal.show()
   }
 
@@ -285,12 +305,18 @@ myApp.controller('CategoryController', ['$scope', '$ionicModal', 'Authentication
     message: null,
     balance: 100,
     modalCategory: '',
-    categories: [
-      'Groceries',
-      'Eating Out',
-      'Gas',
-      'Shopping'
-    ],
+    categories: {
+      'income': [
+        'Salary',
+        'Bonus'
+      ],
+      'expense': [
+        'Groceries',
+        'Eating Out',
+        'Gas',
+        'Shopping'
+      ]
+    },
     items: [
       {
         'category': 'Groceries',
@@ -318,11 +344,35 @@ myApp.controller('CategoryController', ['$scope', '$ionicModal', 'Authentication
         'category': 'Freelance',
         'value': 1000
       }
-    ]
+    ],
+    expenseList: [
+      {
+        'category': 'Groceries',
+        'value': 100
+      },
+      {
+        'category': 'Groceries',
+        'value': 150
+      },
+      {
+        'category': 'Eating Out',
+        'value': 50
+      },
+      {
+        'category': 'Gas',
+        'value': 40
+      },
+      {
+        'category': 'Shopping',
+        'value': 120
+      }
+    ],
+    itemsList: []
   }
-  $scope.createCategory = function (category) {
-    $scope.data.categories.push(category)
-    $rootScope.data.selectedcategory = category
+  $scope.createCategory = function (category, item) {
+    category = category.toLowerCase()
+    $scope.data.categories[category].push(item)
+    $rootScope.data.selectedcategory = item
     $scope.categoryModal.hide()
   }
   $scope.showCategoryModal = function (title) {
@@ -336,13 +386,13 @@ myApp.controller('CategoryController', ['$scope', '$ionicModal', 'Authentication
   })
   $scope.$on('$destroy', function () {
     $scope.categoryModal.remove()
-    console.log('modal destroyed')
+    console.log('Category modal destroyed')
   })
   $scope.$on('modal.hidden', function () {
     $rootScope.data.modalCategory = ''
-    console.log('modal hidden')
+    console.log('Category modal hidden')
   })
   $scope.$on('modal.removed', function () {
-    console.log('modal removed')
+    console.log('Category modal removed')
   })
 }])
