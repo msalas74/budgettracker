@@ -320,19 +320,19 @@ myApp.controller('CategoryController', ['$scope', '$ionicModal', 'Authentication
     items: [
       {
         'category': 'Groceries',
-        'cost': 250
+        'value': 250
       },
       {
         'category': 'Eating Out',
-        'cost': 50
+        'value': 50
       },
       {
         'category': 'Gas',
-        'cost': 40
+        'value': 40
       },
       {
         'category': 'Shopping',
-        'cost': 120
+        'value': 120
       }
     ],
     incomeList: [
