@@ -10,17 +10,18 @@
       </div>
       
       <div class="item">
-        <form name="incomeForm" novalidate>
+        <form name="incomeForm" novalidate
+        ng-submit="addExpense()">
           <label class="item item-input item-select">
             <div class="input-label">Category</div>
-            <select name="category" ng-model="data.selectedcategory" ng-required="true">
+            <select name="category" ng-model="data.selectedCategoryExpense" ng-required="true">
               <option value="{{category}}" ng-repeat="category in data.categories.expense">{{category}}</option>
             </select>
           </label>
 
           <ion-item class="item item-input">
             <span class="input-label">Cost</span>
-            <input type="number" name="expense" placeholder="00.00" ng-model="data.expense" ng-required="true">
+            <input type="number" name="expense" placeholder="00.00" ng-model="data.expenseValue" ng-required="true">
           </ion-item>
           <p class="item item-text-wrap item-assertive" ng-show="myform.expense.$invalid && myform.expense.$touched">Please provide a cost value.</p>
           

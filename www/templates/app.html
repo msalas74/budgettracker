@@ -14,7 +14,7 @@
         <span class="item-note">Expense</span>
       </div>
       <div class="item item-icon-left item-icon-right">
-        <i class="icon ion-information-circled button button-small" ng-click="showModal('Income')">{{data.budget | currency:"USD$"}}</i>
+        <i class="icon ion-information-circled button button-small" ng-click="showModal('Income')">{{data.income | currency:"USD$"}}</i>
         <i class="icon ion-information-circled button button-small" ng-click="showModal('Expense')">{{data.expense | currency:"USD$"}}</i>
       </div>
 
@@ -27,7 +27,7 @@
         <i class="icon ion-social-usd"></i>
       </div>
       <div class="item">
-        <div class="item" ng-repeat="item in data.items">
+        <div class="item" ng-repeat="item in data.expenses">
           <button class="button button-clear button-dark" ng-click="showModal(item.category)">
             <i class="icon ion-information-circled"></i>
              {{item.category}}
@@ -45,9 +45,9 @@
 
   </ion-content>
   <div class="bar bar-footer" ng-controller="AppController">
-    <button class="button button-balanced footer-button" ng-click="income()">Income</button>
+    <button class="button button-balanced footer-button" ng-click="showAddIncome()">Income</button>
     <h1 class="title" ng-click="showGraph()"><i class="icon ion-ios-pie"></i></h1>
-    <button class="button button-assertive footer-button" ng-click="expense()">Expense</button>
+    <button class="button button-assertive footer-button" ng-click="showAddExpense()">Expense</button>
   </div>
 </ion-view>
 

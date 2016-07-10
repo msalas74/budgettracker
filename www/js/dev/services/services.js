@@ -14,6 +14,7 @@ myApp.factory('Authentication', ['$rootScope', '$location', '$firebaseAuth', '$f
       var userObj = $firebaseObject(userRef)
       // expose the data to AngularJS
       $rootScope.currentUser = userObj
+      //  console.log($rootScope.currentUser)
     } else {
       $rootScope.currentUser = null
       $rootScope.data.message = null
@@ -49,7 +50,7 @@ myApp.factory('Authentication', ['$rootScope', '$location', '$firebaseAuth', '$f
       return auth.$requireAuth()
     },
     register: function (user) {
-      //  $ionicNavBarDelegate.showBackButton(true)
+      $ionicNavBarDelegate.showBackButton(true)
       auth.$createUser({
         email: user.email,
         password: user.password
@@ -69,15 +70,15 @@ myApp.factory('Authentication', ['$rootScope', '$location', '$firebaseAuth', '$f
       })
     },
     showGraph: function () {
-      //  $ionicNavBarDelegate.showBackButton(true)
+      $ionicNavBarDelegate.showBackButton(true)
       $location.path('/infographic')
     },
-    income: function () {
-      //  $ionicNavBarDelegate.showBackButton(true)
+    showAddIncome: function () {
+      $ionicNavBarDelegate.showBackButton(true)
       $location.path('/income')
     },
-    expense: function () {
-      //  $ionicNavBarDelegate.showBackButton(true)
+    showAddExpense: function () {
+      $ionicNavBarDelegate.showBackButton(true)
       $location.path('/expense')
     }
   }
