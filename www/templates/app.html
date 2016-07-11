@@ -14,8 +14,8 @@
         <span class="item-note">Expense</span>
       </div>
       <div class="item item-icon-left item-icon-right">
-        <i class="icon ion-information-circled button button-small" ng-click="showModal('Income')">{{data.income | currency:"USD$"}}</i>
-        <i class="icon ion-information-circled button button-small" ng-click="showModal('Expense')">{{data.expense | currency:"USD$"}}</i>
+        <i class="icon ion-information-circled button button-small" ng-click="showModal('Income')">{{data.incomeTotal | currency:"USD$"}}</i>
+        <i class="icon ion-information-circled button button-small" ng-click="showModal('Expense')">{{data.expenseTotal | currency:"USD$"}}</i>
       </div>
 
       <div class="item item-divider">

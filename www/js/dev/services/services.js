@@ -31,6 +31,7 @@ myApp.factory('Authentication', ['$rootScope', '$location', '$firebaseAuth', '$f
           //  $ionicNavBarDelegate.showBackButton(false)
           $location.path('/app')
           $rootScope.data.message = 'You are currently logged in.'
+          // load all data
           //  Prevent back navigation button to appear in the main application view
           $ionicHistory.nextViewOptions({
             disableBack: true
