@@ -215,7 +215,8 @@ myApp.controller('CategoryController', ['$scope', '$location', '$ionicModal', 'A
           var data = snapshot.val()
           budgetTrackerExpenseCategoryRef.set({
             name: $scope.data.selectedCategoryExpense,
-            totalValue: data.totalValue + $scope.data.expenseValue
+            totalValue: data.totalValue + $scope.data.expenseValue,
+            date: Firebase.ServerValue.TIMESTAMP
           })
         })
         $location.path('/app')
@@ -241,7 +242,7 @@ myApp.controller('CategoryController', ['$scope', '$location', '$ionicModal', 'A
         if (!categoryExist) {
           var budgetTrackerCategoryRef = new Firebase(FIREBASE_URL + 'users/' + $rootScope.currentUser.$id + '/budgettracker/categories/' + category + '/' + item)
           //  add new category
-          budgetTrackerCategoryRef.child(category).set({
+          budgetTrackerCategoryRef.set({
             name: item,
             totalValue: 0,
             date: Firebase.ServerValue.TIMESTAMP
