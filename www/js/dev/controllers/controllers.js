@@ -64,9 +64,9 @@ myApp.controller('AppController', ['$scope', '$ionicModal', 'Authentication', '$
       $rootScope.data.incomes = budgetTrackerIncomeList
 
       //  get category list for income and expense
-      var budgetTrackerCategoryIncomeRef = new Firebase(FIREBASE_URL + 'users/' + $rootScope.currentUser.$id + '/budgettracker/categories/income')
+      /*var budgetTrackerCategoryIncomeRef = new Firebase(FIREBASE_URL + 'users/' + $rootScope.currentUser.$id + '/budgettracker/categories/income')
       var budgetTrackerCategoryIncomeList = $firebaseArray(budgetTrackerCategoryIncomeRef)
-      $rootScope.data.incomesCategory = budgetTrackerCategoryIncomeList
+      $rootScope.data.incomesCategory = budgetTrackerCategoryIncomeList*/
 
       $scope.logout = function () {
         Authentication.logout()
@@ -200,18 +200,37 @@ myApp.controller('CategoryController', ['$scope', '$location', '$ionicModal', 'A
       }
       $scope.createCategory = function (category, item) {
         category = category.toLowerCase()
-        var budgetTrackerCategoryRef = new Firebase(FIREBASE_URL + 'users/' + $rootScope.currentUser.$id + '/budgettracker/categories/' + category)
-        var budgetTrackerCategory = $firebaseArray(budgetTrackerCategoryRef)
-        //  add new category
-        budgetTrackerCategory.$add({
-          name: item,
-          date: Firebase.ServerValue.TIMESTAMP
-        })
-        $scope.data.categories[category].push(item)
-        if (category === 'income') {
-          $rootScope.data.selectedCategoryIncome = item
-        } else if (category === 'expense') {
-          $rootScope.data.selectedCategoryExpense = item
+        //  check to make sure that category does not exist
+        var existingCategoryList = $scope.data.categories[category]
+        var categoryExist = false
+        if (existingCategoryList) {
+          existingCategoryList.forEach(function (e) {
+            // check to see if item exist
+            console.log(e.name)
+            if (item === e.name) {
+              console.log('Found it: ' + e.name)
+              $rootScope.data.message = 'Category already exist.'
+              $rootScope.data.selectedCategoryIncome = item
+              categoryExist = true
+              return
+            }
+          })
+        }
+        if (!categoryExist) {
+          var budgetTrackerCategoryRef = new Firebase(FIREBASE_URL + 'users/' + $rootScope.currentUser.$id + '/budgettracker/categories/' + category)
+          var budgetTrackerCategory = $firebaseArray(budgetTrackerCategoryRef)
+          //  add new category
+          budgetTrackerCategory.$add({
+            name: item,
+            totalValue: 0,
+            date: Firebase.ServerValue.TIMESTAMP
+          })
+          $scope.data.categories[category].push(item)
+          if (category === 'income') {
+            $rootScope.data.selectedCategoryIncome = item
+          } else if (category === 'expense') {
+            $rootScope.data.selectedCategoryExpense = item
+          }
         }
         $scope.categoryModal.hide()
         //$scope.data.newCategoryName = ''
