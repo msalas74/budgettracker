@@ -28,12 +28,12 @@
       </div>
       <div class="item">
         <div class="item" ng-repeat="item in data.expenses">
-          <button class="button button-clear button-dark" ng-click="showModal(item.category)">
+          <button class="button button-clear button-dark" ng-click="showModal(item.name)">
             <i class="icon ion-information-circled"></i>
-             {{item.category}}
+             {{item.name}}
           </button>
           
-          <span class="item-note">{{item.value | currency:"USD$"}}</span>
+          <span class="item-note">{{item.totalValue | currency:"USD$"}}</span>
         </div>
       </div>
       <div class="item item-divider">

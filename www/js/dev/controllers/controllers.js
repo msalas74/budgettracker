@@ -55,8 +55,11 @@ myApp.controller('AppController', ['$scope', '$ionicModal', 'Authentication', '$
       //  expense list
       var budgetTrackerExpenseRef = new Firebase(FIREBASE_URL + 'users/' + $rootScope.currentUser.$id + '/budgettracker/expense')
       var budgetTrackerExpenseList = $firebaseArray(budgetTrackerExpenseRef)
-      //  TODO
-      $rootScope.data.expenses = budgetTrackerExpenseList
+
+      //  list expense category groups
+      var budgetTrackerCategoryExpenseRef = new Firebase(FIREBASE_URL + 'users/' + $rootScope.currentUser.$id + '/budgettracker/categories/expense')
+      var budgetTrackerCategoryExpense = $firebaseArray(budgetTrackerCategoryExpenseRef)
+      $rootScope.data.expenses = budgetTrackerCategoryExpense
 
       //  income list
       var budgetTrackerIncomeRef = new Firebase(FIREBASE_URL + 'users/' + $rootScope.currentUser.$id + '/budgettracker/income')
@@ -146,6 +149,7 @@ myApp.controller('CategoryController', ['$scope', '$location', '$ionicModal', 'A
       if (budgetTrackerCategoryExpense !== undefined) $rootScope.data.categories.expense = budgetTrackerCategoryExpense
 
       $scope.addIncome = function () {
+
         $scope.data.incomeTotal += $scope.data.incomeValue
         var budgetTrackerIncomeRef = new Firebase(FIREBASE_URL + 'users/' + $rootScope.currentUser.$id + '/budgettracker/income')
         var budgetTrackerIncomeTotalRef = new Firebase(FIREBASE_URL + 'users/' + $rootScope.currentUser.$id + '/budgettracker/incometotal')
@@ -171,8 +175,16 @@ myApp.controller('CategoryController', ['$scope', '$location', '$ionicModal', 'A
         var balanceValue = $rootScope.data.incomeTotal - $rootScope.data.expenseTotal
         $rootScope.data.balance = balanceValue
 
-        //  add new category if required
-
+        //  increment total value of category
+        var selectedCategory = $scope.data.selectedCategoryIncome
+        var incomeIndex = 0
+        budgetTrackerCategoryIncome.forEach(function (e) {
+          if (e.name === selectedCategory) {
+            $scope.data.categories.income[incomeIndex].totalValue += $scope.data.incomeValue
+            console.log('Found it: ' + e.name)
+          }
+          incomeIndex++
+        })
         //  console.log($scope.currentUser.budgettracker)
         $location.path('/app')
       }
@@ -196,6 +208,16 @@ myApp.controller('CategoryController', ['$scope', '$location', '$ionicModal', 'A
         var balanceValue = $rootScope.data.incomeTotal - $rootScope.data.expenseTotal
         $rootScope.data.balance = balanceValue
 
+        //  update expense group total value
+        var budgetTrackerExpenseCategoryRef = new Firebase(FIREBASE_URL + 'users/' + $rootScope.currentUser.$id + '/budgettracker/categories/expense/' + $scope.data.selectedCategoryExpense)
+
+        budgetTrackerExpenseCategoryRef.once('value', function (snapshot) {
+          var data = snapshot.val()
+          budgetTrackerExpenseCategoryRef.set({
+            name: $scope.data.selectedCategoryExpense,
+            totalValue: data.totalValue + $scope.data.expenseValue
+          })
+        })
         $location.path('/app')
       }
       $scope.createCategory = function (category, item) {
@@ -217,19 +239,24 @@ myApp.controller('CategoryController', ['$scope', '$location', '$ionicModal', 'A
           })
         }
         if (!categoryExist) {
-          var budgetTrackerCategoryRef = new Firebase(FIREBASE_URL + 'users/' + $rootScope.currentUser.$id + '/budgettracker/categories/' + category)
-          var budgetTrackerCategory = $firebaseArray(budgetTrackerCategoryRef)
+          var budgetTrackerCategoryRef = new Firebase(FIREBASE_URL + 'users/' + $rootScope.currentUser.$id + '/budgettracker/categories/' + category + '/' + item)
           //  add new category
-          budgetTrackerCategory.$add({
+          budgetTrackerCategoryRef.child(category).set({
             name: item,
             totalValue: 0,
             date: Firebase.ServerValue.TIMESTAMP
           })
+
+          item = {
+            name: item,
+            totalValue: 0
+          }
+
           $scope.data.categories[category].push(item)
           if (category === 'income') {
-            $rootScope.data.selectedCategoryIncome = item
+            $rootScope.data.selectedCategoryIncome = item.name
           } else if (category === 'expense') {
-            $rootScope.data.selectedCategoryExpense = item
+            $rootScope.data.selectedCategoryExpense = item.name
           }
         }
         $scope.categoryModal.hide()
