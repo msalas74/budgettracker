@@ -21,29 +21,7 @@ myApp.controller('RegisterController', ['$scope', '$http', 'Authentication', fun
 
 myApp.controller('AppController', ['$scope', '$ionicModal', 'Authentication', '$http', '$rootScope', '$firebaseAuth', '$firebaseArray', '$firebaseObject', 'FIREBASE_URL', function ($scope, $ionicModal, Authentication, $http, $rootScope, $firebaseAuth, $firebaseObject, $firebaseArray, FIREBASE_URL) {
   $rootScope.data = {
-    message: null,
-    balance: 100,
-    modalCategory: '',
-    listTitle: '',
-    items: [
-      {
-        'category': 'Groceries',
-        'value': 250
-      },
-      {
-        'category': 'Eating Out',
-        'value': 50
-      },
-      {
-        'category': 'Gas',
-        'value': 40
-      },
-      {
-        'category': 'Shopping',
-        'value': 120
-      }
-    ],
-    itemsList: []
+    message: null
   }
 
   // create ref to Firebase data
@@ -55,17 +33,24 @@ myApp.controller('AppController', ['$scope', '$ionicModal', 'Authentication', '$
     if (authUser) {
       //  expense total
       var budgetTrackerExpenseTotalRef = new Firebase(FIREBASE_URL + 'users/' + $rootScope.currentUser.$id + '/budgettracker/expensetotal')
-      budgetTrackerExpenseTotalRef.once('value', function (snapshot) {
-        var data = snapshot.val()
-        $rootScope.data.expenseTotal = data.total
-      })
+      if (budgetTrackerExpenseTotalRef) {
+        budgetTrackerExpenseTotalRef.once('value', function (snapshot) {
+          var data = snapshot.val()
+          $rootScope.data.expenseTotal = data.total
+        })
+      }
 
       //  income total
       var budgetTrackerIncomeTotalRef = new Firebase(FIREBASE_URL + 'users/' + $rootScope.currentUser.$id + '/budgettracker/incometotal')
-      budgetTrackerIncomeTotalRef.once('value', function (snapshot) {
-        var data = snapshot.val()
-        $rootScope.data.incomeTotal = data.total
-      })
+      if (budgetTrackerIncomeTotalRef) {
+        budgetTrackerIncomeTotalRef.once('value', function (snapshot) {
+          var data = snapshot.val()
+          $rootScope.data.incomeTotal = data.total
+        })
+      }
+      //  balance
+      var balanceValue = $rootScope.data.incomeTotal - $rootScope.data.expenseTotal
+      $rootScope.data.balance = balanceValue
 
       //  expense list
       var budgetTrackerExpenseRef = new Firebase(FIREBASE_URL + 'users/' + $rootScope.currentUser.$id + '/budgettracker/expense')
@@ -77,6 +62,11 @@ myApp.controller('AppController', ['$scope', '$ionicModal', 'Authentication', '$
       var budgetTrackerIncomeRef = new Firebase(FIREBASE_URL + 'users/' + $rootScope.currentUser.$id + '/budgettracker/income')
       var budgetTrackerIncomeList = $firebaseArray(budgetTrackerIncomeRef)
       $rootScope.data.incomes = budgetTrackerIncomeList
+
+      //  get category list for income and expense
+      var budgetTrackerCategoryIncomeRef = new Firebase(FIREBASE_URL + 'users/' + $rootScope.currentUser.$id + '/budgettracker/categories/income')
+      var budgetTrackerCategoryIncomeList = $firebaseArray(budgetTrackerCategoryIncomeRef)
+      $rootScope.data.incomesCategory = budgetTrackerCategoryIncomeList
 
       $scope.logout = function () {
         Authentication.logout()
@@ -127,7 +117,11 @@ myApp.controller('AppController', ['$scope', '$ionicModal', 'Authentication', '$
 
 myApp.controller('CategoryController', ['$scope', '$location', '$ionicModal', 'Authentication', '$http', '$rootScope', '$firebaseAuth', '$firebaseObject', '$firebaseArray', 'FIREBASE_URL', function ($scope, $location, $ionicModal, Authentication, $http, $rootScope, $firebaseAuth, $firebaseObject, $firebaseArray, FIREBASE_URL) {
   $rootScope.data = {
-    message: null
+    message: null,
+    categories: {
+      income: [],
+      expense: []
+    }
   }
 
   // create ref to Firebase data
@@ -140,25 +134,45 @@ myApp.controller('CategoryController', ['$scope', '$location', '$ionicModal', 'A
       var budgetTrackerRef = new Firebase(FIREBASE_URL + 'users/' + $rootScope.currentUser.$id)
       // grab all data for expense category list
       var budgetTracker = $firebaseObject(budgetTrackerRef)
+      //  ref link to categories
+      var budgetTrackerCategoryIncomeRef = new Firebase(FIREBASE_URL + 'users/' + $rootScope.currentUser.$id + '/budgettracker/categories/income')
+      var budgetTrackerCategoryIncome = $firebaseArray(budgetTrackerCategoryIncomeRef)
+      //  load existing income categories from database
+      if (budgetTrackerCategoryIncome !== undefined) $rootScope.data.categories.income = budgetTrackerCategoryIncome
+
+      var budgetTrackerCategoryExpenseRef = new Firebase(FIREBASE_URL + 'users/' + $rootScope.currentUser.$id + '/budgettracker/categories/expense')
+      var budgetTrackerCategoryExpense = $firebaseArray(budgetTrackerCategoryExpenseRef)
+      //  load existing expense categories from database
+      if (budgetTrackerCategoryExpense !== undefined) $rootScope.data.categories.expense = budgetTrackerCategoryExpense
+
       $scope.addIncome = function () {
         $scope.data.incomeTotal += $scope.data.incomeValue
         var budgetTrackerIncomeRef = new Firebase(FIREBASE_URL + 'users/' + $rootScope.currentUser.$id + '/budgettracker/income')
         var budgetTrackerIncomeTotalRef = new Firebase(FIREBASE_URL + 'users/' + $rootScope.currentUser.$id + '/budgettracker/incometotal')
+
         // grab all data from user
         var budgetTrackerIncome = $firebaseArray(budgetTrackerIncomeRef)
 
+        //  add item to database
         budgetTrackerIncome.$add({
           category: $scope.data.selectedCategoryIncome,
           value: $scope.data.incomeValue,
           date: Firebase.ServerValue.TIMESTAMP
         })
 
+        // increment the income total
         var newIncomeTotal = $rootScope.currentUser.budgettracker.incometotal.total + $scope.data.incomeValue
         budgetTrackerIncomeTotalRef.set({
           total: newIncomeTotal,
           date: Firebase.ServerValue.TIMESTAMP
         })
         $rootScope.data.incomeTotal = newIncomeTotal
+        //  update balance
+        var balanceValue = $rootScope.data.incomeTotal - $rootScope.data.expenseTotal
+        $rootScope.data.balance = balanceValue
+
+        //  add new category if required
+
         //  console.log($scope.currentUser.budgettracker)
         $location.path('/app')
       }
@@ -178,13 +192,29 @@ myApp.controller('CategoryController', ['$scope', '$location', '$ionicModal', 'A
           date: Firebase.ServerValue.TIMESTAMP
         })
         $rootScope.data.expenseTotal = newExpenseTotal
+        //  update balance
+        var balanceValue = $rootScope.data.incomeTotal - $rootScope.data.expenseTotal
+        $rootScope.data.balance = balanceValue
+
         $location.path('/app')
       }
       $scope.createCategory = function (category, item) {
         category = category.toLowerCase()
+        var budgetTrackerCategoryRef = new Firebase(FIREBASE_URL + 'users/' + $rootScope.currentUser.$id + '/budgettracker/categories/' + category)
+        var budgetTrackerCategory = $firebaseArray(budgetTrackerCategoryRef)
+        //  add new category
+        budgetTrackerCategory.$add({
+          name: item,
+          date: Firebase.ServerValue.TIMESTAMP
+        })
         $scope.data.categories[category].push(item)
-        $rootScope.data.selectedcategory = item
+        if (category === 'income') {
+          $rootScope.data.selectedCategoryIncome = item
+        } else if (category === 'expense') {
+          $rootScope.data.selectedCategoryExpense = item
+        }
         $scope.categoryModal.hide()
+        //$scope.data.newCategoryName = ''
       }
       $scope.showCategoryModal = function (title) {
         $scope.data.itemsTitle = title
@@ -200,7 +230,7 @@ myApp.controller('CategoryController', ['$scope', '$location', '$ionicModal', 'A
         console.log('Category modal destroyed')
       })
       $scope.$on('modal.hidden', function () {
-        $rootScope.data.modalCategory = ''
+        $rootScope.data.newCategoryName = ''
         console.log('Category modal hidden')
       })
       $scope.$on('modal.removed', function () {

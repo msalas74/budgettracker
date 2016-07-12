@@ -15,7 +15,7 @@
           <label class="item item-input item-select">
             <div class="input-label">Category</div>
             <select name="category" ng-model="data.selectedCategoryExpense" ng-required="true">
-              <option value="{{category}}" ng-repeat="category in data.categories.expense">{{category}}</option>
+              <option value="{{category.name}}" ng-repeat="category in data.categories.expense">{{category.name}}</option>
             </select>
           </label>
 

@@ -64,6 +64,21 @@ myApp.factory('Authentication', ['$rootScope', '$location', '$firebaseAuth', '$f
           email: user.email,
           username: user.username
         })
+        // initialize data
+        //  income total
+        var budgetTrackerIncomeTotalRef = new Firebase(FIREBASE_URL + 'users/' + regUser.uid + '/budgettracker/incometotal')
+        budgetTrackerIncomeTotalRef.set({
+          total: 0,
+          date: Firebase.ServerValue.TIMESTAMP
+        })
+        $rootScope.data.incomeTotal = 0
+        //  expense total
+        var budgetTrackerExpenseTotalRef = new Firebase(FIREBASE_URL + 'users/' + regUser.uid + '/budgettracker/expensetotal')
+        budgetTrackerExpenseTotalRef.set({
+          total: 0,
+          date: Firebase.ServerValue.TIMESTAMP
+        })
+        $rootScope.data.expenseTotal = 0
 
         authObj.login(user)
       }).catch(function (error) {
