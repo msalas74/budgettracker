@@ -3,7 +3,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-var myApp = angular.module('btApp', ['ionic', 'firebase', 'ngCordova'])
+var myApp = angular.module('btApp', ['ionic', 'firebase', 'ngCordova', 'nvd3'])
 .constant('FIREBASE_URL', 'https://bt01.firebaseio.com/')
 .run(function ($ionicPlatform) {
   $ionicPlatform.ready(function () {
