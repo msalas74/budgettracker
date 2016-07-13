@@ -23,6 +23,7 @@ myApp.controller('AppController', ['$scope', '$ionicModal', 'Authentication', '$
   $rootScope.data = {
     message: null
   }
+  
 
   // create ref to Firebase data
   var ref = new Firebase(FIREBASE_URL)
@@ -31,6 +32,7 @@ myApp.controller('AppController', ['$scope', '$ionicModal', 'Authentication', '$
 
   auth.$onAuth(function (authUser) {
     if (authUser) {
+      
       //  expense total
       var budgetTrackerExpenseTotalRef = new Firebase(FIREBASE_URL + 'users/' + $rootScope.currentUser.$id + '/budgettracker/expensetotal')
       if (budgetTrackerExpenseTotalRef) {
@@ -60,6 +62,46 @@ myApp.controller('AppController', ['$scope', '$ionicModal', 'Authentication', '$
       var budgetTrackerCategoryExpenseRef = new Firebase(FIREBASE_URL + 'users/' + $rootScope.currentUser.$id + '/budgettracker/categories/expense')
       var budgetTrackerCategoryExpense = $firebaseArray(budgetTrackerCategoryExpenseRef)
       $rootScope.data.expenses = budgetTrackerCategoryExpense
+
+      //  D3JS
+      $scope.vm = {}
+      $scope.vm.options = {}
+      $scope.vm.data = {}
+      $scope.vm.options = {
+        chart: {
+          type: 'pieChart',
+          height: 500,
+          x: function (d) { return d.key },
+          y: function (d) { return d.y },
+          showLabels: true,
+          duration: 500,
+          labelThreshold: 0.01,
+          labelSunbeamLayout: true,
+          legend: {
+            margin: {
+              top: 5,
+              right: 35,
+              bottom: 5,
+              left: 0
+            }
+          }
+        }
+      }
+
+      var d3Data = []
+      budgetTrackerCategoryExpenseRef.once('value', function (snapshot) {
+        var d3Item = {}
+        snapshot.forEach(function(childSnapshot) {
+          var data = childSnapshot.val()
+          d3Item = {
+            key: data.name,
+            y: data.totalValue
+          }
+          d3Data.push(d3Item)
+        })
+      })
+
+      $scope.vm.data = d3Data
 
       //  income list
       var budgetTrackerIncomeRef = new Firebase(FIREBASE_URL + 'users/' + $rootScope.currentUser.$id + '/budgettracker/income')
@@ -114,6 +156,7 @@ myApp.controller('AppController', ['$scope', '$ionicModal', 'Authentication', '$
         // handle event
         console.log('View: ', data.title)
       })
+
     } // if authUser
   })
 }])
