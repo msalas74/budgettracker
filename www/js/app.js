@@ -226,27 +226,60 @@ myApp.controller('AppController', ['$scope', '$ionicModal', 'Authentication', '$
 
   auth.$onAuth(function (authUser) {
     if (authUser) {
-      
-      //  expense total
-      var budgetTrackerExpenseTotalRef = new Firebase(FIREBASE_URL + 'users/' + $rootScope.currentUser.$id + '/budgettracker/expensetotal')
-      if (budgetTrackerExpenseTotalRef) {
-        budgetTrackerExpenseTotalRef.once('value', function (snapshot) {
-          var data = snapshot.val()
-          $rootScope.data.expenseTotal = data.total
-        })
+      //  data variable for bulletChart
+      var bulletData = {}
+      bulletData.max = 0
+      bulletData.measure = 0
+      $scope.bulletData = {
+        min: 0,
+        mid: 0,
+        max: 0,
+        measure: 0
       }
+      
 
       //  income total
       var budgetTrackerIncomeTotalRef = new Firebase(FIREBASE_URL + 'users/' + $rootScope.currentUser.$id + '/budgettracker/incometotal')
       if (budgetTrackerIncomeTotalRef) {
         budgetTrackerIncomeTotalRef.once('value', function (snapshot) {
-          var data = snapshot.val()
+          var data = snapshot.exportVal()
           $rootScope.data.incomeTotal = data.total
+          bulletData.max = data.tool
+
+          //  expense total
+          var budgetTrackerExpenseTotalRef = new Firebase(FIREBASE_URL + 'users/' + $rootScope.currentUser.$id + '/budgettracker/expensetotal')
+          if (budgetTrackerExpenseTotalRef) {
+            budgetTrackerExpenseTotalRef.once('value', function (snapshot) {
+              var data = snapshot.exportVal()
+              $rootScope.data.expenseTotal = data.total
+              bulletData.measure = data.total
+
+              $scope.bulletChart = {}
+              $scope.bulletChart.options = {}
+              $scope.bulletChart.data = {}
+              $scope.bulletChart.options = {
+                chart: {
+                  type: 'bulletChart',
+                  duration: 1000
+                }
+              }
+
+              $scope.bulletChart.data = {
+                'title': 'Balance',
+                'subtitle': 'US$',
+                'ranges': [0, 0, $rootScope.data.incomeTotal],
+                'measures': [$rootScope.data.expenseTotal],
+                'markers': []
+              }
+              //  balance
+              var balanceValue = $rootScope.data.incomeTotal - $rootScope.data.expenseTotal
+              $rootScope.data.balance = balanceValue
+            })
+          }
         })
       }
-      //  balance
-      var balanceValue = $rootScope.data.incomeTotal - $rootScope.data.expenseTotal
-      $rootScope.data.balance = balanceValue
+
+      
 
       //  expense list
       var budgetTrackerExpenseRef = new Firebase(FIREBASE_URL + 'users/' + $rootScope.currentUser.$id + '/budgettracker/expense')
@@ -268,7 +301,7 @@ myApp.controller('AppController', ['$scope', '$ionicModal', 'Authentication', '$
           x: function (d) { return d.key },
           y: function (d) { return d.y },
           showLabels: true,
-          duration: 500,
+          duration: 1000,
           labelThreshold: 0.01,
           labelSunbeamLayout: true,
           legend: {
@@ -285,7 +318,7 @@ myApp.controller('AppController', ['$scope', '$ionicModal', 'Authentication', '$
       var d3Data = []
       budgetTrackerCategoryExpenseRef.once('value', function (snapshot) {
         var d3Item = {}
-        snapshot.forEach(function(childSnapshot) {
+        snapshot.forEach(function (childSnapshot) {
           var data = childSnapshot.val()
           d3Item = {
             key: data.name,
