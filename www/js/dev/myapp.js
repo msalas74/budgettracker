@@ -35,6 +35,7 @@ var myApp = angular.module('btApp', ['ionic', 'nvd3', 'firebase', 'ngCordova'])
     })
     .state('app', {
       url: '/app',
+      cache: false,
       templateUrl: 'templates/app.html',
       controller: 'AppController',
       resolve: {

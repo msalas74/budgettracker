@@ -23,7 +23,6 @@ myApp.controller('AppController', ['$scope', '$ionicModal', 'Authentication', '$
   $rootScope.data = {
     message: null
   }
-  
 
   // create ref to Firebase data
   var ref = new Firebase(FIREBASE_URL)
@@ -33,12 +32,23 @@ myApp.controller('AppController', ['$scope', '$ionicModal', 'Authentication', '$
   auth.$onAuth(function (authUser) {
     if (authUser) {
       //  data variable for bulletChart
+      $scope.bulletChart = {}
+      $scope.bulletChart.options = {}
+      $scope.bulletChart.data = {}
+      $scope.bulletChart.options = {
+        chart: {
+          type: 'bulletChart',
+          duration: 1000,
+          height: 50
+        }
+      }
 
-      $scope.bulletData = {
-        min: 0,
-        mid: 0,
-        max: 0,
-        measure: 0
+      $scope.bulletChart.data = {
+        'title': 'Balance',
+        'subtitle': 'US$',
+        'ranges': [0, 0, $scope.bulletChart.data.incomeTotal || 0],
+        'measures': [$scope.bulletChart.data.expenseTotal || 0],
+        'markers': []
       }
       //  income total
       var budgetTrackerIncomeTotalRef = new Firebase(FIREBASE_URL + 'users/' + $rootScope.currentUser.$id + '/budgettracker/incometotal')
@@ -46,6 +56,7 @@ myApp.controller('AppController', ['$scope', '$ionicModal', 'Authentication', '$
         budgetTrackerIncomeTotalRef.once('value', function (snapshot) {
           var data = snapshot.exportVal()
           $rootScope.data.incomeTotal = data.total
+          $scope.bulletChart.data.incomeTotal = data.total
 
           //  expense total
           var budgetTrackerExpenseTotalRef = new Firebase(FIREBASE_URL + 'users/' + $rootScope.currentUser.$id + '/budgettracker/expensetotal')
@@ -53,22 +64,13 @@ myApp.controller('AppController', ['$scope', '$ionicModal', 'Authentication', '$
             budgetTrackerExpenseTotalRef.once('value', function (snapshot) {
               var data = snapshot.exportVal()
               $rootScope.data.expenseTotal = data.total
-
-              $scope.bulletChart = {}
-              $scope.bulletChart.options = {}
-              $scope.bulletChart.data = {}
-              $scope.bulletChart.options = {
-                chart: {
-                  type: 'bulletChart',
-                  duration: 1000
-                }
-              }
+              $scope.bulletChart.data.expenseTotal = data.total
 
               $scope.bulletChart.data = {
                 'title': 'Balance',
                 'subtitle': 'US$',
-                'ranges': [0, 0, $rootScope.data.incomeTotal],
-                'measures': [$rootScope.data.expenseTotal],
+                'ranges': [0, 0, $scope.bulletChart.data.incomeTotal || 0],
+                'measures': [$scope.bulletChart.data.expenseTotal || 0],
                 'markers': []
               }
               //  balance
@@ -181,8 +183,7 @@ myApp.controller('AppController', ['$scope', '$ionicModal', 'Authentication', '$
         // handle event
         console.log('View: ', data.title)
       })
-
-    } // if authUser
+    } // if authUser===========================================================
   })
 }])
 
@@ -194,7 +195,6 @@ myApp.controller('CategoryController', ['$scope', '$location', '$ionicModal', 'A
       expense: []
     }
   }
-
   // create ref to Firebase data
   var ref = new Firebase(FIREBASE_URL)
   // create authentication Firebase object with the ref to the database location
@@ -217,7 +217,6 @@ myApp.controller('CategoryController', ['$scope', '$location', '$ionicModal', 'A
       if (budgetTrackerCategoryExpense !== undefined) $rootScope.data.categories.expense = budgetTrackerCategoryExpense
 
       $scope.addIncome = function () {
-
         $scope.data.incomeTotal += $scope.data.incomeValue
         var budgetTrackerIncomeRef = new Firebase(FIREBASE_URL + 'users/' + $rootScope.currentUser.$id + '/budgettracker/income')
         var budgetTrackerIncomeTotalRef = new Firebase(FIREBASE_URL + 'users/' + $rootScope.currentUser.$id + '/budgettracker/incometotal')
