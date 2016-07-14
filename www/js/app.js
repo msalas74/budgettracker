@@ -234,7 +234,8 @@ myApp.controller('AppController', ['$scope', '$ionicModal', 'Authentication', '$
         chart: {
           type: 'bulletChart',
           duration: 1000,
-          height: 50
+          height: 50,
+          color: '7F0000'
         }
       }
 
@@ -243,7 +244,8 @@ myApp.controller('AppController', ['$scope', '$ionicModal', 'Authentication', '$
         'subtitle': 'US$',
         'ranges': [0, 0, $scope.bulletChart.data.incomeTotal || 0],
         'measures': [$scope.bulletChart.data.expenseTotal || 0],
-        'markers': []
+        'markers': [],
+        'rangeLabels': ['Income', '', '']
       }
       //  income total
       var budgetTrackerIncomeTotalRef = new Firebase(FIREBASE_URL + 'users/' + $rootScope.currentUser.$id + '/budgettracker/incometotal')
@@ -266,7 +268,9 @@ myApp.controller('AppController', ['$scope', '$ionicModal', 'Authentication', '$
                 'subtitle': 'US$',
                 'ranges': [0, 0, $scope.bulletChart.data.incomeTotal || 0],
                 'measures': [$scope.bulletChart.data.expenseTotal || 0],
-                'markers': []
+                'markers': [],
+                'rangeLabels': ['Income', '', ''],
+                'measureLabels': ['Expense']
               }
               //  balance
               var balanceValue = $rootScope.data.incomeTotal - $rootScope.data.expenseTotal
