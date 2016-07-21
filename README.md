@@ -4,7 +4,7 @@ This mobile application helps to keep track of you daily budget goals.
 
 ## Getting Started
 
-Clone the repo and run npm install.  Type ionic serve to run the app in a browser.
+Clone the repo and run npm install.  Type ionic serve to run the app in a browser.  Checkout the app through this link [Budget Tracker](https://msalas74.github.io/budgettracker/www/index.html#/)
 
 
 ## Built With
