@@ -1,4 +1,4 @@
-myApp.controller('LoginController', ['$scope', '$rootScope', 'Authentication', function ($scope, $rootScope, Authentication) {
+myApp.controller('LoginController', ['$scope', 'Authentication', function ($scope, Authentication) {
   $scope.login = function () {
     Authentication.login($scope.user)
   }
@@ -8,7 +8,7 @@ myApp.controller('LoginController', ['$scope', '$rootScope', 'Authentication', f
   }
 }])
 
-myApp.controller('RegisterController', ['$scope', '$http', 'Authentication', function ($scope, $http, Authentication) {
+myApp.controller('RegisterController', ['$scope', 'Authentication', function ($scope, Authentication) {
 
   $scope.register = function () {
     if ($scope.user.username !== '' && $scope.user.email !== '' && $scope.user.password !== '') {
@@ -20,7 +20,7 @@ myApp.controller('RegisterController', ['$scope', '$http', 'Authentication', fun
 }])
 
 myApp.controller('AppController', ['$scope', '$ionicModal', 'Authentication', '$http', '$rootScope', '$firebaseAuth', '$firebaseArray', '$firebaseObject', 'FIREBASE_URL', function ($scope, $ionicModal, Authentication, $http, $rootScope, $firebaseAuth, $firebaseObject, $firebaseArray, FIREBASE_URL) {
-  $rootScope.data = {
+  $scope.data = {
     message: null
   }
 
