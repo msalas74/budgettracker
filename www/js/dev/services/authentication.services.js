@@ -6,6 +6,8 @@ myApp.factory('Authentication', ['$rootScope', '$location', '$firebaseAuth', '$f
     message: null
   }
 
+  var currentUserId = null
+
   auth.$onAuth(function (authUser) {
     if (authUser) {
       // grab the authenticated user id
@@ -14,7 +16,8 @@ myApp.factory('Authentication', ['$rootScope', '$location', '$firebaseAuth', '$f
       var userObj = $firebaseObject(userRef)
       // expose the data to AngularJS
       $rootScope.currentUser = userObj
-      //  console.log($rootScope.currentUser)
+      currentUserId = $rootScope.currentUser.$id
+      //console.log($rootScope.currentUser.$id)
     } else {
       $rootScope.currentUser = null
       $rootScope.data.message = null
@@ -85,17 +88,8 @@ myApp.factory('Authentication', ['$rootScope', '$location', '$firebaseAuth', '$f
         $rootScope.data.message = error.message
       })
     },
-    showGraph: function () {
-      $ionicNavBarDelegate.showBackButton(true)
-      $location.path('/infographic')
-    },
-    showAddIncome: function () {
-      $ionicNavBarDelegate.showBackButton(true)
-      $location.path('/income')
-    },
-    showAddExpense: function () {
-      $ionicNavBarDelegate.showBackButton(true)
-      $location.path('/expense')
+    getCurrentUserId: function () {
+      return currentUserId
     }
   }
 

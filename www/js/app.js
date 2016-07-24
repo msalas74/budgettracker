@@ -1,5 +1,7 @@
 // Ionic Starter App
 
+// angular.module is a global place for creating, registering and retrieving Angular modules
+// 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 var myApp = angular.module('btApp', ['ionic', 'nvd3', 'firebase', 'ngCordova'])
 .constant('FIREBASE_URL', 'https://bt01.firebaseio.com/')
@@ -94,6 +96,8 @@ myApp.factory('Authentication', ['$rootScope', '$location', '$firebaseAuth', '$f
     message: null
   }
 
+  var currentUserId = null
+
   auth.$onAuth(function (authUser) {
     if (authUser) {
       // grab the authenticated user id
@@ -102,7 +106,8 @@ myApp.factory('Authentication', ['$rootScope', '$location', '$firebaseAuth', '$f
       var userObj = $firebaseObject(userRef)
       // expose the data to AngularJS
       $rootScope.currentUser = userObj
-      //  console.log($rootScope.currentUser)
+      currentUserId = $rootScope.currentUser.$id
+      //console.log($rootScope.currentUser.$id)
     } else {
       $rootScope.currentUser = null
       $rootScope.data.message = null
@@ -173,144 +178,94 @@ myApp.factory('Authentication', ['$rootScope', '$location', '$firebaseAuth', '$f
         $rootScope.data.message = error.message
       })
     },
-    showGraph: function () {
-      $ionicNavBarDelegate.showBackButton(true)
-      $location.path('/infographic')
-    },
-    showAddIncome: function () {
-      $ionicNavBarDelegate.showBackButton(true)
-      $location.path('/income')
-    },
-    showAddExpense: function () {
-      $ionicNavBarDelegate.showBackButton(true)
-      $location.path('/expense')
+    getCurrentUserId: function () {
+      return currentUserId
     }
   }
 
   return authObj
 }])
 
-myApp.controller('LoginController', ['$scope', '$rootScope', 'Authentication', function ($scope, $rootScope, Authentication) {
-  $scope.login = function () {
-    Authentication.login($scope.user)
-  }
 
-  $scope.logout = function () {
-    Authentication.logout()
-  }
-}])
-
-myApp.controller('RegisterController', ['$scope', '$http', 'Authentication', function ($scope, $http, Authentication) {
-
-  $scope.register = function () {
-    if ($scope.user.username !== '' && $scope.user.email !== '' && $scope.user.password !== '') {
-      Authentication.register($scope.user)
-    } else {
-      $scope.message = 'Invalid registration information.'
-    }
-  }
-}])
-
-myApp.controller('AppController', ['$scope', '$ionicModal', 'Authentication', '$http', '$rootScope', '$firebaseAuth', '$firebaseArray', '$firebaseObject', 'FIREBASE_URL', function ($scope, $ionicModal, Authentication, $http, $rootScope, $firebaseAuth, $firebaseObject, $firebaseArray, FIREBASE_URL) {
+myApp.factory('BudgetTracker', ['$rootScope', '$location', 'Authentication', '$firebaseAuth', '$firebaseArray', '$firebaseObject', 'FIREBASE_URL', '$ionicNavBarDelegate', '$ionicModal', function ($rootScope, $location, Authentication, $firebaseAuth, $firebaseObject, $firebaseArray, FIREBASE_URL, $ionicNavBarDelegate, $ionicModal) {
   $rootScope.data = {
     message: null
   }
 
-  // create ref to Firebase data
-  var ref = new Firebase(FIREBASE_URL)
-  // create authentication Firebase object with the ref to the database location
-  var auth = $firebaseAuth(ref)
+  //  data variable for bulletChart
+  $rootScope.bulletChart = {}
+  $rootScope.bulletChart.options = {}
+  $rootScope.bulletChart.data = {}
+  $rootScope.bulletChart.options = {
+    chart: {
+      type: 'bulletChart',
+      duration: 1000,
+      height: 50,
+      color: '7F0000'
+    }
+  }
 
-  auth.$onAuth(function (authUser) {
-    if (authUser) {
-      //  data variable for bulletChart
-      $scope.bulletChart = {}
-      $scope.bulletChart.options = {}
-      $scope.bulletChart.data = {}
-      $scope.bulletChart.options = {
-        chart: {
-          type: 'bulletChart',
-          duration: 1000,
-          height: 50,
-          color: '7F0000'
+  $rootScope.bulletChart.data = {
+    'title': 'Balance',
+    'subtitle': 'US$',
+    'ranges': [0, 0, $rootScope.bulletChart.data.incomeTotal || 0],
+    'measures': [$rootScope.bulletChart.data.expenseTotal || 0],
+    'markers': [],
+    'rangeLabels': ['Income', '', '']
+  }
+
+  //  D3JS
+  $rootScope.vm = {}
+  $rootScope.vm.options = {}
+  $rootScope.vm.data = {}
+  $rootScope.vm.options = {
+    chart: {
+      type: 'pieChart',
+      height: 500,
+      x: function (d) { return d.key },
+      y: function (d) { return d.y },
+      showLabels: true,
+      duration: 1000,
+      labelThreshold: 0.01,
+      labelSunbeamLayout: true,
+      legend: {
+        margin: {
+          top: 5,
+          right: 35,
+          bottom: 5,
+          left: 0
         }
       }
+    }
+  }
 
-      $scope.bulletChart.data = {
-        'title': 'Balance',
-        'subtitle': 'US$',
-        'ranges': [0, 0, $scope.bulletChart.data.incomeTotal || 0],
-        'measures': [$scope.bulletChart.data.expenseTotal || 0],
-        'markers': [],
-        'rangeLabels': ['Income', '', '']
-      }
-      //  income total
-      var budgetTrackerIncomeTotalRef = new Firebase(FIREBASE_URL + 'users/' + $rootScope.currentUser.$id + '/budgettracker/incometotal')
-      if (budgetTrackerIncomeTotalRef) {
-        budgetTrackerIncomeTotalRef.once('value', function (snapshot) {
-          var data = snapshot.exportVal()
-          $rootScope.data.incomeTotal = data.total
-          $scope.bulletChart.data.incomeTotal = data.total
+  $ionicModal.fromTemplateUrl('templates/itemListModal.html', {
+    scope: $rootScope
+  }).then(function (modal) {
+    $rootScope.modal = modal
+  })
+  $rootScope.$on('$destroy', function () {
+    $rootScope.modal.remove()
+    //console.log('modal destroyed')
+  })
+  $rootScope.$on('modal.hidden', function () {
+    $rootScope.data.modalCategory = ''
+    //console.log('modal hidden')
+  })
+  $rootScope.$on('modal.removed', function () {
+    //console.log('modal removed')
+  })
+  $rootScope.$on('$ionicView.enter', function (event, data) {
+    //console.log('View: ', data.title)
+  })
 
-          //  expense total
-          var budgetTrackerExpenseTotalRef = new Firebase(FIREBASE_URL + 'users/' + $rootScope.currentUser.$id + '/budgettracker/expensetotal')
-          if (budgetTrackerExpenseTotalRef) {
-            budgetTrackerExpenseTotalRef.once('value', function (snapshot) {
-              var data = snapshot.exportVal()
-              $rootScope.data.expenseTotal = data.total
-              $scope.bulletChart.data.expenseTotal = data.total
-
-              $scope.bulletChart.data = {
-                'title': 'Balance',
-                'subtitle': 'US$',
-                'ranges': [0, 0, $scope.bulletChart.data.incomeTotal || 0],
-                'measures': [$scope.bulletChart.data.expenseTotal || 0],
-                'markers': [],
-                'rangeLabels': ['Income', '', ''],
-                'measureLabels': ['Expense']
-              }
-              //  balance
-              var balanceValue = $rootScope.data.incomeTotal - $rootScope.data.expenseTotal
-              $rootScope.data.balance = balanceValue
-            })
-          }
-        })
-      }
-
-      //  expense list
-      var budgetTrackerExpenseRef = new Firebase(FIREBASE_URL + 'users/' + $rootScope.currentUser.$id + '/budgettracker/expense')
-      var budgetTrackerExpenseList = $firebaseArray(budgetTrackerExpenseRef)
-
-      //  list expense category groups
-      var budgetTrackerCategoryExpenseRef = new Firebase(FIREBASE_URL + 'users/' + $rootScope.currentUser.$id + '/budgettracker/categories/expense')
-      var budgetTrackerCategoryExpense = $firebaseArray(budgetTrackerCategoryExpenseRef)
-      $rootScope.data.expenses = budgetTrackerCategoryExpense
-
-      //  D3JS
-      $scope.vm = {}
-      $scope.vm.options = {}
-      $scope.vm.data = {}
-      $scope.vm.options = {
-        chart: {
-          type: 'pieChart',
-          height: 500,
-          x: function (d) { return d.key },
-          y: function (d) { return d.y },
-          showLabels: true,
-          duration: 1000,
-          labelThreshold: 0.01,
-          labelSunbeamLayout: true,
-          legend: {
-            margin: {
-              top: 5,
-              right: 35,
-              bottom: 5,
-              left: 0
-            }
-          }
-        }
-      }
-
+  var budgetObj = {
+    showGraph: function () {
+      $ionicNavBarDelegate.showBackButton(true)
+      $location.path('/infographic')
+    },
+    setUpPieGraph: function (userId) {
+      var budgetTrackerCategoryExpenseRef = new Firebase(FIREBASE_URL + 'users/' + userId + '/budgettracker/categories/expense')
       var d3Data = []
       budgetTrackerCategoryExpenseRef.once('value', function (snapshot) {
         var d3Item = {}
@@ -323,62 +278,158 @@ myApp.controller('AppController', ['$scope', '$ionicModal', 'Authentication', '$
           d3Data.push(d3Item)
         })
       })
-
-      $scope.vm.data = d3Data
-
+      $rootScope.vm.data = d3Data
+    },
+    showAddIncome: function () {
+      $ionicNavBarDelegate.showBackButton(true)
+      $location.path('/income')
+    },
+    showAddExpense: function () {
+      $ionicNavBarDelegate.showBackButton(true)
+      $location.path('/expense')
+    },
+    getExpenseList: function (userId) {
+      //  expense list
+      var budgetTrackerExpenseRef = new Firebase(FIREBASE_URL + 'users/' + userId + '/budgettracker/expense')
+      var budgetTrackerExpenseList = $firebaseArray(budgetTrackerExpenseRef)
+      return budgetTrackerExpenseList
+    },
+    getExpenseCategories: function (userId) {
+      //  list expense category groups
+      var budgetTrackerCategoryExpenseRef = new Firebase(FIREBASE_URL + 'users/' + userId + '/budgettracker/categories/expense')
+      var budgetTrackerCategoryExpense = $firebaseArray(budgetTrackerCategoryExpenseRef)
+      $rootScope.data.expenses = budgetTrackerCategoryExpense
+      return budgetTrackerCategoryExpense
+    },
+    getExpenseTotal: function () {
+      //  expense total
+      var budgetTrackerExpenseTotalRef = new Firebase(FIREBASE_URL + 'users/' + $rootScope.currentUser.$id + '/budgettracker/expensetotal')
+      if (budgetTrackerExpenseTotalRef) {
+        budgetTrackerExpenseTotalRef.once('value', function (snapshot) {
+          var data = snapshot.exportVal()
+          $rootScope.data.expenseTotal = data.total
+          $rootScope.bulletChart.data.expenseTotal = data.total
+        })
+      }
+    },
+    getIncomeList: function (userId) {
       //  income list
-      var budgetTrackerIncomeRef = new Firebase(FIREBASE_URL + 'users/' + $rootScope.currentUser.$id + '/budgettracker/income')
+      var budgetTrackerIncomeRef = new Firebase(FIREBASE_URL + 'users/' + userId + '/budgettracker/income')
       var budgetTrackerIncomeList = $firebaseArray(budgetTrackerIncomeRef)
       $rootScope.data.incomes = budgetTrackerIncomeList
+      return budgetTrackerIncomeList
+    },
+    getIncomeTotal: function (userId) {
+      //  income total
+      var budgetTrackerIncomeTotalRef = new Firebase(FIREBASE_URL + 'users/' + userId + '/budgettracker/incometotal')
+      if (budgetTrackerIncomeTotalRef) {
+        budgetTrackerIncomeTotalRef.once('value', function (snapshot) {
+          var data = snapshot.exportVal()
+          $rootScope.data.incomeTotal = data.total
+          $rootScope.bulletChart.data.incomeTotal = data.total
+        })
+      }
+    },
+    getBudgetBalance: function (userId) {
+      //  income total
+      var budgetTrackerIncomeTotalRef = new Firebase(FIREBASE_URL + 'users/' + userId + '/budgettracker/incometotal')
+      if (budgetTrackerIncomeTotalRef) {
+        budgetTrackerIncomeTotalRef.once('value', function (snapshot) {
+          var data = snapshot.exportVal()
+          $rootScope.data.incomeTotal = data.total
+          $rootScope.bulletChart.data.incomeTotal = data.total
 
-      //  get category list for income and expense
-      /*var budgetTrackerCategoryIncomeRef = new Firebase(FIREBASE_URL + 'users/' + $rootScope.currentUser.$id + '/budgettracker/categories/income')
-      var budgetTrackerCategoryIncomeList = $firebaseArray(budgetTrackerCategoryIncomeRef)
-      $rootScope.data.incomesCategory = budgetTrackerCategoryIncomeList*/
+          //  expense total
+          var budgetTrackerExpenseTotalRef = new Firebase(FIREBASE_URL + 'users/' + userId + '/budgettracker/expensetotal')
+          if (budgetTrackerExpenseTotalRef) {
+            budgetTrackerExpenseTotalRef.once('value', function (snapshot) {
+              var data = snapshot.exportVal()
+              $rootScope.data.expenseTotal = data.total
+              $rootScope.bulletChart.data.expenseTotal = data.total
 
+              $rootScope.bulletChart.data = {
+                'title': 'Balance',
+                'subtitle': 'US$',
+                'ranges': [0, 0, $rootScope.bulletChart.data.incomeTotal || 0],
+                'measures': [$rootScope.bulletChart.data.expenseTotal || 0],
+                'markers': [],
+                'rangeLabels': ['Income', '', ''],
+                'measureLabels': ['Expense']
+              }
+              //  balance
+              var balanceValue = $rootScope.data.incomeTotal - $rootScope.data.expenseTotal
+              $rootScope.data.balance = balanceValue
+            })
+          }
+        })
+      }
+    },
+    showModal: function (title, userId) {
+      title = title.toLowerCase()
+      $rootScope.data.listTitle = title
+      if (title === 'expense') {
+        $rootScope.data.itemsList = this.getExpenseList(userId)
+      } else if (title === 'income') {
+        $rootScope.data.itemsList = this.getIncomeList(userId)
+      }
+      $rootScope.modal.show()
+    }
+  }
+  return budgetObj
+}])
+
+myApp.controller('LoginController', ['$scope', 'Authentication', function ($scope, Authentication) {
+  $scope.login = function () {
+    Authentication.login($scope.user)
+  }
+
+  $scope.logout = function () {
+    Authentication.logout()
+  }
+}])
+
+myApp.controller('RegisterController', ['$scope', 'Authentication', function ($scope, Authentication) {
+
+  $scope.register = function () {
+    if ($scope.user.username !== '' && $scope.user.email !== '' && $scope.user.password !== '') {
+      Authentication.register($scope.user)
+    } else {
+      $scope.message = 'Invalid registration information.'
+    }
+  }
+}])
+
+myApp.controller('AppController', ['$scope', 'Authentication', 'BudgetTracker', '$firebaseAuth', 'FIREBASE_URL', function ($scope, Authentication, BudgetTracker, $firebaseAuth, FIREBASE_URL) {
+
+  // create ref to Firebase data
+  var ref = new Firebase(FIREBASE_URL)
+  // create authentication Firebase object with the ref to the database location
+  var auth = $firebaseAuth(ref)
+
+  auth.$onAuth(function (authUser) {
+    if (authUser) {
+      var currentUserId = Authentication.getCurrentUserId()
+
+      BudgetTracker.getBudgetBalance(currentUserId)
+      BudgetTracker.getIncomeTotal(currentUserId)
+      $scope.data.expenses = BudgetTracker.getExpenseCategories(currentUserId)
+      BudgetTracker.setUpPieGraph(currentUserId)
+      
       $scope.logout = function () {
         Authentication.logout()
       }
       $scope.showGraph = function () {
-        Authentication.showGraph()
+        BudgetTracker.showGraph()
       }
       $scope.showAddIncome = function () {
-        Authentication.showAddIncome()
+        BudgetTracker.showAddIncome()
       }
       $scope.showAddExpense = function () {
-        Authentication.showAddExpense()
+        BudgetTracker.showAddExpense()
       }
       $scope.showModal = function (title) {
-        title = title.toLowerCase()
-        $scope.data.listTitle = title
-        if (title === 'expense') {
-          $rootScope.data.itemsList = budgetTrackerExpenseList
-        } else if (title === 'income') {
-          $rootScope.data.itemsList = budgetTrackerIncomeList
-        }
-        $scope.modal.show()
+        BudgetTracker.showModal(title, currentUserId)
       }
-
-      $ionicModal.fromTemplateUrl('templates/itemListModal.html', {
-        scope: $scope
-      }).then(function (modal) {
-        $scope.modal = modal
-      })
-      $scope.$on('$destroy', function () {
-        $scope.modal.remove()
-        console.log('modal destroyed')
-      })
-      $scope.$on('modal.hidden', function () {
-        $rootScope.data.modalCategory = ''
-        console.log('modal hidden')
-      })
-      $scope.$on('modal.removed', function () {
-        console.log('modal removed')
-      })
-      $scope.$on('$ionicView.enter', function (event, data) {
-        // handle event
-        console.log('View: ', data.title)
-      })
     } // if authUser===========================================================
   })
 }])
