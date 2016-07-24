@@ -28,6 +28,7 @@ gulp.task('sass', function (done) {
 
 gulp.task('watch', function () {
   gulp.watch(paths.sass, ['sass'])
+  gulp.watch(jsFiles, ['js'])
 })
 
 gulp.task('install', ['git-check'], function () {
@@ -54,6 +55,7 @@ var jsFiles = [
   'www/js/dev/myapp.js',
   'www/js/dev/services/authentication.services.js',
   'www/js/dev/services/budgettracker.services.js',
+  'www/js/dev/services/category.services.js',
   'www/js/dev/controllers/controllers.js'
 ]
 

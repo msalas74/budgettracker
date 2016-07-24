@@ -3,7 +3,7 @@
     <h1 class="title">New {{data.itemsTitle}} Category</h1>
     <button class="icon ion-close-circled button button-clear button-assertive" ng-click="categoryModal.hide()"></button>
   </ion-header-bar>
-  <ion-content class="padding">
+  <ion-content class="padding" ng-controller="CategoryController">
     <div class="list">
       <label class="item item-input">
         <span class="input-label">Category</span>
