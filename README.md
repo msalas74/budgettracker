@@ -2,6 +2,7 @@
 
 This mobile application helps to keep track of you daily budget goals.
 
+
 ## Getting Started
 
 Clone the repo and run npm install.  Type ionic serve to run the app in a browser.  Checkout the app through this link [Budget Tracker](https://msalas74.github.io/budgettracker/www/index.html#/)
@@ -17,11 +18,18 @@ Clone the repo and run npm install.  Type ionic serve to run the app in a browse
 * NPM - To install all the dependencies...and stuff
 * Sublime Text - Where it's all put together!
 * Code Style - [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
+
+
+## TODO List
+
+* Edit and Delete method.
+* Establish method for saving data to local storage.
  
 
 ## Authors
 
 * **Matias Salas** - *Initial work* - [Website Portfolio](http://www.matiasis.me)
+
 
 ## License
 
