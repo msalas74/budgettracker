@@ -2,6 +2,12 @@
 
 This mobile application helps to keep track of you daily budget goals.
 
+## Features
+* User registration
+* User Authentication
+* Remote storage
+* Graphic data charts
+
 
 ## Getting Started
 
