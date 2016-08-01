@@ -1,4 +1,4 @@
-myApp.factory('Authentication', ['$rootScope', '$location', '$firebaseAuth', '$firebaseObject', 'FIREBASE_URL', '$ionicNavBarDelegate', '$ionicHistory', function ($rootScope, $location, $firebaseAuth, $firebaseObject, FIREBASE_URL, $ionicNavBarDelegate, $ionicHistory) {
+myApp.factory('Authentication', ['$rootScope', 'Loader', '$location', '$firebaseAuth', '$firebaseObject', 'FIREBASE_URL', '$ionicNavBarDelegate', '$ionicHistory', function ($rootScope, Loader, $location, $firebaseAuth, $firebaseObject, FIREBASE_URL, $ionicNavBarDelegate, $ionicHistory) {
   var ref = new Firebase(FIREBASE_URL)
   var auth = $firebaseAuth(ref)
 
@@ -13,8 +13,7 @@ myApp.factory('Authentication', ['$rootScope', '$location', '$firebaseAuth', '$f
       // grab the authenticated user id
       var userRef = new Firebase(FIREBASE_URL + 'users/' + authUser.uid)
       // grab all the data of the current user
-      var userObj = $firebaseObject(userRef)
-      // expose the data to AngularJS
+      var userObj = $firebaseObject(userRef)// expose the data to AngularJS
       $rootScope.currentUser = userObj
       currentUserId = $rootScope.currentUser.$id
       //console.log($rootScope.currentUser.$id)
@@ -27,11 +26,14 @@ myApp.factory('Authentication', ['$rootScope', '$location', '$firebaseAuth', '$f
   var authObj = {
     login: function (user) {
       if (user) {
+        // show loader
+        Loader.showLoading()
         auth.$authWithPassword({
           email: user.email,
           password: user.password
         }).then(function (regUser) {
           //  $ionicNavBarDelegate.showBackButton(false)
+          Loader.hideLoading()
           $location.path('/app')
           $rootScope.data.message = 'You are currently logged in.'
           // load all data
@@ -40,10 +42,11 @@ myApp.factory('Authentication', ['$rootScope', '$location', '$firebaseAuth', '$f
             disableBack: true
           })
         }).catch(function (error) {
+          Loader.hideLoading()
           $rootScope.data.message = error.message
         })
       } else {
-        console.log('login failed')
+        console.log('no user object passed through login method.')
       }
     },
     logout: function () {
@@ -54,6 +57,7 @@ myApp.factory('Authentication', ['$rootScope', '$location', '$firebaseAuth', '$f
       return auth.$requireAuth()
     },
     register: function (user) {
+      Loader.showLoading()
       $ionicNavBarDelegate.showBackButton(true)
       auth.$createUser({
         email: user.email,
@@ -85,6 +89,7 @@ myApp.factory('Authentication', ['$rootScope', '$location', '$firebaseAuth', '$f
 
         authObj.login(user)
       }).catch(function (error) {
+        Loader.hideLoading()
         $rootScope.data.message = error.message
       })
     },

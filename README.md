@@ -28,7 +28,7 @@ Clone the repo and run npm install.  Type ionic serve to run the app in a browse
 
 ## TODO List
 
-* Modal to list items in a category.
+* Modal to list items in a category. (Completed 7-31-16)
 * Loader icons while app is retrieving data from server.
 * Edit and Delete method.
 * Sorting list method.

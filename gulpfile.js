@@ -53,6 +53,7 @@ gulp.task('git-check', function (done) {
 
 var jsFiles = [
   'www/js/dev/myapp.js',
+  'www/js/dev/services/loader.services.js',
   'www/js/dev/services/authentication.services.js',
   'www/js/dev/services/budgettracker.services.js',
   'www/js/dev/services/category.services.js',

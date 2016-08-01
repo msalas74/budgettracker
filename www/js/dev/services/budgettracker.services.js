@@ -1,4 +1,4 @@
-myApp.factory('BudgetTracker', ['$rootScope', '$location', 'Authentication', '$firebaseAuth', '$firebaseArray', '$firebaseObject', 'FIREBASE_URL', '$ionicNavBarDelegate', '$ionicModal', function ($rootScope, $location, Authentication, $firebaseAuth, $firebaseObject, $firebaseArray, FIREBASE_URL, $ionicNavBarDelegate, $ionicModal) {
+myApp.factory('BudgetTracker', ['$rootScope', '$location', 'Authentication', 'Loader', '$firebaseAuth', '$firebaseArray', '$firebaseObject', 'FIREBASE_URL', '$ionicNavBarDelegate', '$ionicModal', function ($rootScope, $location, Authentication, Loader, $firebaseAuth, $firebaseObject, $firebaseArray, FIREBASE_URL, $ionicNavBarDelegate, $ionicModal) {
   $rootScope.data = {
     message: null
   }

@@ -88,7 +88,25 @@ var myApp = angular.module('btApp', ['ionic', 'nvd3', 'firebase', 'ngCordova'])
   $urlRouterProvider.otherwise('/')
 })
 
-myApp.factory('Authentication', ['$rootScope', '$location', '$firebaseAuth', '$firebaseObject', 'FIREBASE_URL', '$ionicNavBarDelegate', '$ionicHistory', function ($rootScope, $location, $firebaseAuth, $firebaseObject, FIREBASE_URL, $ionicNavBarDelegate, $ionicHistory) {
+myApp.factory('Loader', ['$rootScope', '$ionicLoading', function ($rootScope, $ionicLoading) {
+  var loaderObj = {
+    showLoading: function () {
+      $ionicLoading.show({
+        templateUrl: 'templates/loader.html'
+      }).then(function () {
+        console.log('The loading indicator is now showing.')
+      })
+    },
+    hideLoading: function () {
+      $ionicLoading.hide().then(function () {
+        console.log('The loading indicator is now hidden.')
+      })
+    }
+  }
+  return loaderObj
+}])
+
+myApp.factory('Authentication', ['$rootScope', 'Loader', '$location', '$firebaseAuth', '$firebaseObject', 'FIREBASE_URL', '$ionicNavBarDelegate', '$ionicHistory', function ($rootScope, Loader, $location, $firebaseAuth, $firebaseObject, FIREBASE_URL, $ionicNavBarDelegate, $ionicHistory) {
   var ref = new Firebase(FIREBASE_URL)
   var auth = $firebaseAuth(ref)
 
@@ -103,8 +121,7 @@ myApp.factory('Authentication', ['$rootScope', '$location', '$firebaseAuth', '$f
       // grab the authenticated user id
       var userRef = new Firebase(FIREBASE_URL + 'users/' + authUser.uid)
       // grab all the data of the current user
-      var userObj = $firebaseObject(userRef)
-      // expose the data to AngularJS
+      var userObj = $firebaseObject(userRef)// expose the data to AngularJS
       $rootScope.currentUser = userObj
       currentUserId = $rootScope.currentUser.$id
       //console.log($rootScope.currentUser.$id)
@@ -117,11 +134,14 @@ myApp.factory('Authentication', ['$rootScope', '$location', '$firebaseAuth', '$f
   var authObj = {
     login: function (user) {
       if (user) {
+        // show loader
+        Loader.showLoading()
         auth.$authWithPassword({
           email: user.email,
           password: user.password
         }).then(function (regUser) {
           //  $ionicNavBarDelegate.showBackButton(false)
+          Loader.hideLoading()
           $location.path('/app')
           $rootScope.data.message = 'You are currently logged in.'
           // load all data
@@ -130,10 +150,11 @@ myApp.factory('Authentication', ['$rootScope', '$location', '$firebaseAuth', '$f
             disableBack: true
           })
         }).catch(function (error) {
+          Loader.hideLoading()
           $rootScope.data.message = error.message
         })
       } else {
-        console.log('login failed')
+        console.log('no user object passed through login method.')
       }
     },
     logout: function () {
@@ -144,6 +165,7 @@ myApp.factory('Authentication', ['$rootScope', '$location', '$firebaseAuth', '$f
       return auth.$requireAuth()
     },
     register: function (user) {
+      Loader.showLoading()
       $ionicNavBarDelegate.showBackButton(true)
       auth.$createUser({
         email: user.email,
@@ -175,6 +197,7 @@ myApp.factory('Authentication', ['$rootScope', '$location', '$firebaseAuth', '$f
 
         authObj.login(user)
       }).catch(function (error) {
+        Loader.hideLoading()
         $rootScope.data.message = error.message
       })
     },
@@ -187,7 +210,7 @@ myApp.factory('Authentication', ['$rootScope', '$location', '$firebaseAuth', '$f
 }])
 
 
-myApp.factory('BudgetTracker', ['$rootScope', '$location', 'Authentication', '$firebaseAuth', '$firebaseArray', '$firebaseObject', 'FIREBASE_URL', '$ionicNavBarDelegate', '$ionicModal', function ($rootScope, $location, Authentication, $firebaseAuth, $firebaseObject, $firebaseArray, FIREBASE_URL, $ionicNavBarDelegate, $ionicModal) {
+myApp.factory('BudgetTracker', ['$rootScope', '$location', 'Authentication', 'Loader', '$firebaseAuth', '$firebaseArray', '$firebaseObject', 'FIREBASE_URL', '$ionicNavBarDelegate', '$ionicModal', function ($rootScope, $location, Authentication, Loader, $firebaseAuth, $firebaseObject, $firebaseArray, FIREBASE_URL, $ionicNavBarDelegate, $ionicModal) {
   $rootScope.data = {
     message: null
   }
@@ -618,7 +641,7 @@ myApp.controller('AppController', ['$scope', 'Authentication', 'BudgetTracker', 
       BudgetTracker.getIncomeTotal(currentUserId)
       $scope.data.expenses = BudgetTracker.getExpenseCategories(currentUserId)
       BudgetTracker.setUpPieGraph(currentUserId)
-      
+
       $scope.logout = function () {
         Authentication.logout()
       }

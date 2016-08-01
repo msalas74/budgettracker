@@ -34,7 +34,7 @@ myApp.controller('AppController', ['$scope', 'Authentication', 'BudgetTracker', 
       BudgetTracker.getIncomeTotal(currentUserId)
       $scope.data.expenses = BudgetTracker.getExpenseCategories(currentUserId)
       BudgetTracker.setUpPieGraph(currentUserId)
-      
+
       $scope.logout = function () {
         Authentication.logout()
       }
