@@ -105,6 +105,23 @@ myApp.factory('BudgetTracker', ['$rootScope', '$location', 'Authentication', '$f
       var budgetTrackerExpenseList = $firebaseArray(budgetTrackerExpenseRef)
       return budgetTrackerExpenseList
     },
+    getExpenseItemList: function (userId, item) {
+      var budgetTrackerExpenseItemRef = new Firebase(FIREBASE_URL + 'users/' + userId + '/budgettracker/expense')
+      var expenseListArray = []
+      budgetTrackerExpenseItemRef.orderByChild('category').equalTo(item).once('value', function (snapshot) {
+        snapshot.forEach(function (data) {
+          //  console.log(data.key() + ': ' + data.val().category + ': ' + data.val().value)
+          expenseListArray.push({
+            category: data.val().category,
+            value: data.val().value
+          })
+        })
+        //  console.log(expenseListArray)
+        $rootScope.data.itemsList = expenseListArray
+        $rootScope.modal.show()
+        //  return expenseListArray
+      })
+    },
     getExpenseCategories: function (userId) {
       //  list expense category groups
       var budgetTrackerCategoryExpenseRef = new Firebase(FIREBASE_URL + 'users/' + userId + '/budgettracker/categories/expense')
@@ -182,6 +199,8 @@ myApp.factory('BudgetTracker', ['$rootScope', '$location', 'Authentication', '$f
         $rootScope.data.itemsList = this.getExpenseList(userId)
       } else if (title === 'income') {
         $rootScope.data.itemsList = this.getIncomeList(userId)
+      } else {
+        $rootScope.data.itemsList = null
       }
       $rootScope.modal.show()
     }

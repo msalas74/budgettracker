@@ -28,7 +28,7 @@
       </div>
       <div class="item">
         <div class="item" ng-repeat="item in data.expenses">
-          <button class="button button-clear button-dark" ng-click="showModal(item.name)">
+          <button class="button button-clear button-dark" ng-click="getExpenseItemList(item.name)">
             <i class="icon ion-information-circled"></i>
              {{item.name}}
           </button>

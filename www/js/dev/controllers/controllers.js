@@ -50,6 +50,9 @@ myApp.controller('AppController', ['$scope', 'Authentication', 'BudgetTracker', 
       $scope.showModal = function (title) {
         BudgetTracker.showModal(title, currentUserId)
       }
+      $scope.getExpenseItemList = function (item) {
+        BudgetTracker.getExpenseItemList(currentUserId, item)
+      }
     } // if authUser===========================================================
   })
 }])
