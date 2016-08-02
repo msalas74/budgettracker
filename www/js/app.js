@@ -312,14 +312,25 @@ myApp.factory('BudgetTracker', ['$rootScope', '$location', 'Authentication', 'Lo
       $location.path('/expense')
     },
     getExpenseList: function (userId) {
+      // show loading
+      Loader.showLoading()
       //  expense list
       var budgetTrackerExpenseRef = new Firebase(FIREBASE_URL + 'users/' + userId + '/budgettracker/expense')
       var budgetTrackerExpenseList = $firebaseArray(budgetTrackerExpenseRef)
+      budgetTrackerExpenseList.$loaded()
+      .then(function (fbArray) {
+        Loader.hideLoading()
+      })
+      .catch(function (err) {
+        Loader.hideLoading()
+      })
       return budgetTrackerExpenseList
     },
     getExpenseItemList: function (userId, item) {
       var budgetTrackerExpenseItemRef = new Firebase(FIREBASE_URL + 'users/' + userId + '/budgettracker/expense')
       var expenseListArray = []
+      // show loading
+      Loader.showLoading()
       budgetTrackerExpenseItemRef.orderByChild('category').equalTo(item).once('value', function (snapshot) {
         snapshot.forEach(function (data) {
           //  console.log(data.key() + ': ' + data.val().category + ': ' + data.val().value)
@@ -333,6 +344,7 @@ myApp.factory('BudgetTracker', ['$rootScope', '$location', 'Authentication', 'Lo
         $rootScope.modal.show()
         //  return expenseListArray
       })
+      Loader.hideLoading()
     },
     getExpenseCategories: function (userId) {
       //  list expense category groups
@@ -353,9 +365,21 @@ myApp.factory('BudgetTracker', ['$rootScope', '$location', 'Authentication', 'Lo
       }
     },
     getIncomeList: function (userId) {
+      //  show loader
+      Loader.showLoading()
       //  income list
       var budgetTrackerIncomeRef = new Firebase(FIREBASE_URL + 'users/' + userId + '/budgettracker/income')
       var budgetTrackerIncomeList = $firebaseArray(budgetTrackerIncomeRef)
+      budgetTrackerIncomeList.$loaded()
+      .then(function (fbArray) {
+        Loader.hideLoading()
+      })
+      .catch(function (err) {
+        Loader.hideLoading()
+        console.log('Error: ' + err)
+        return null
+      })
+      //console.log(budgetTrackerIncomeList)
       $rootScope.data.incomes = budgetTrackerIncomeList
       return budgetTrackerIncomeList
     },
