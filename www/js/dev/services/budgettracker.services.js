@@ -70,6 +70,27 @@ myApp.factory('BudgetTracker', ['$rootScope', '$location', 'Authentication', 'Lo
     //console.log('View: ', data.title)
   })
 
+  //  subcategory modal
+  $ionicModal.fromTemplateUrl('templates/subCategoryListModal.html', {
+    scope: $rootScope
+  }).then(function (modal) {
+    $rootScope.subCategoryModal = modal
+  })
+  $rootScope.$on('$destroy', function () {
+    $rootScope.subCategoryModal.remove()
+    //console.log('modal destroyed')
+  })
+  $rootScope.$on('modal.hidden', function () {
+    $rootScope.data.modalCategory = ''
+    //console.log('modal hidden')
+  })
+  $rootScope.$on('modal.removed', function () {
+    //console.log('modal removed')
+  })
+  $rootScope.$on('$ionicView.enter', function (event, data) {
+    //console.log('View: ', data.title)
+  })
+
   var budgetObj = {
     showGraph: function () {
       $ionicNavBarDelegate.showBackButton(true)
@@ -122,15 +143,17 @@ myApp.factory('BudgetTracker', ['$rootScope', '$location', 'Authentication', 'Lo
       Loader.showLoading()
       budgetTrackerExpenseItemRef.orderByChild('category').equalTo(item).once('value', function (snapshot) {
         snapshot.forEach(function (data) {
-          //  console.log(data.key() + ': ' + data.val().category + ': ' + data.val().value)
+          console.log(data.key() + ': ' + data.val().category + ': ' + data.val().value)
           expenseListArray.push({
+            id: data.key(),
             category: data.val().category,
             value: data.val().value
           })
         })
         //  console.log(expenseListArray)
         $rootScope.data.itemsList = expenseListArray
-        $rootScope.modal.show()
+        $rootScope.data.listTitle = 'expense'
+        $rootScope.subCategoryModal.show()
         //  return expenseListArray
       })
       Loader.hideLoading()
@@ -217,8 +240,12 @@ myApp.factory('BudgetTracker', ['$rootScope', '$location', 'Authentication', 'Lo
         })
       }
     },
-    deleteItem: function (id) {
-      console.log('Deleting item id: ' + id)
+    deleteItem: function (userId, category, id) {
+      var item = new Firebase(FIREBASE_URL + 'users/' + userId + '/budgettracker/' + category + '/' + id)
+      item.remove()
+      $rootScope.modal.hide()
+      $rootScope.subCategoryModal.hide()
+      console.log('Deleting item id: ' + id + ' from ' + category)
     },
     showModal: function (title, userId) {
       title = title.toLowerCase()

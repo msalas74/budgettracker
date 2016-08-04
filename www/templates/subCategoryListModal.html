@@ -1,12 +1,12 @@
 <ion-modal-view ng-controller="AppController">
   <ion-header-bar class="bar bar-header bar-dark">
     <h1 class="title">{{data.listTitle}} List</h1>
-    <button class="icon ion-close-circled button button-clear button-assertive" ng-click="modal.hide()"></button>
+    <button class="icon ion-close-circled button button-clear button-assertive" ng-click="subCategoryModal.hide()"></button>
   </ion-header-bar>
   <ion-content class="padding">
     <div class="item">
-        <div class="item" ng-repeat="(key, item) in data.itemsList">
-          <button class="button button-clear button-dark" ng-click="deleteItem(data.listTitle ,key)">
+        <div class="item" ng-repeat="item in data.itemsList">
+          <button class="button button-clear button-dark" ng-click="deleteItem(data.listTitle ,item.id)">
             <i class="icon ion-minus-circled"></i>
              {{item.category}}
           </button>
