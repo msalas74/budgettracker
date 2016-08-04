@@ -57,7 +57,9 @@ var jsFiles = [
   'www/js/dev/services/authentication.services.js',
   'www/js/dev/services/budgettracker.services.js',
   'www/js/dev/services/category.services.js',
-  'www/js/dev/controllers/controllers.js'
+  'www/js/dev/controllers/users.controller.js',
+  'www/js/dev/controllers/app.controller.js',
+  'www/js/dev/controllers/category.controller.js'
 ]
 
 gulp.task('js', function () {

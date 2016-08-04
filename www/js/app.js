@@ -649,7 +649,6 @@ myApp.controller('RegisterController', ['$scope', 'Authentication', function ($s
     }
   }
 }])
-
 myApp.controller('AppController', ['$scope', 'Authentication', 'BudgetTracker', '$firebaseAuth', 'FIREBASE_URL', function ($scope, Authentication, BudgetTracker, $firebaseAuth, FIREBASE_URL) {
 
   // create ref to Firebase data
