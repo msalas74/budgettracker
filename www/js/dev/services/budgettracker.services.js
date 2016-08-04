@@ -112,6 +112,7 @@ myApp.factory('BudgetTracker', ['$rootScope', '$location', 'Authentication', 'Lo
       .catch(function (err) {
         Loader.hideLoading()
       })
+      console.log(budgetTrackerExpenseList)
       return budgetTrackerExpenseList
     },
     getExpenseItemList: function (userId, item) {
@@ -215,6 +216,9 @@ myApp.factory('BudgetTracker', ['$rootScope', '$location', 'Authentication', 'Lo
           }
         })
       }
+    },
+    deleteItem: function (id) {
+      console.log('Deleting item id: ' + id)
     },
     showModal: function (title, userId) {
       title = title.toLowerCase()

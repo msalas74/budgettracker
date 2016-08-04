@@ -5,8 +5,8 @@
   </ion-header-bar>
   <ion-content class="padding">
     <div class="item">
-        <div class="item" ng-repeat="item in data.itemsList">
-          <button class="button button-clear button-dark">
+        <div class="item" ng-repeat="(key, item) in data.itemsList">
+          <button class="button button-clear button-dark" ng-click="deleteItem(key)">
             <i class="icon ion-minus-circled"></i>
              {{item.category}}
           </button>

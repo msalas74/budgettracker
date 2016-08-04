@@ -324,6 +324,7 @@ myApp.factory('BudgetTracker', ['$rootScope', '$location', 'Authentication', 'Lo
       .catch(function (err) {
         Loader.hideLoading()
       })
+      console.log(budgetTrackerExpenseList)
       return budgetTrackerExpenseList
     },
     getExpenseItemList: function (userId, item) {
@@ -427,6 +428,9 @@ myApp.factory('BudgetTracker', ['$rootScope', '$location', 'Authentication', 'Lo
           }
         })
       }
+    },
+    deleteItem: function (id) {
+      console.log('Deleting item id: ' + id)
     },
     showModal: function (title, userId) {
       title = title.toLowerCase()
@@ -682,6 +686,9 @@ myApp.controller('AppController', ['$scope', 'Authentication', 'BudgetTracker', 
       }
       $scope.getExpenseItemList = function (item) {
         BudgetTracker.getExpenseItemList(currentUserId, item)
+      }
+      $scope.deleteItem = function (id) {
+        BudgetTracker.deleteItem(id)
       }
     } // if authUser===========================================================
   })
