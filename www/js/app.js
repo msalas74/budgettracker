@@ -452,12 +452,45 @@ myApp.factory('BudgetTracker', ['$rootScope', '$location', 'Authentication', 'Lo
         })
       }
     },
-    deleteItem: function (userId, category, id) {
+    deleteItem: function (userId, category, obj, id) {
       var item = new Firebase(FIREBASE_URL + 'users/' + userId + '/budgettracker/' + category + '/' + id)
       item.remove()
+      if (category === 'income') {
+        budgetObj.subtractFromIncome(obj, userId)
+      } else if (category === 'expense') {
+        budgetObj.subtractFromExpense(obj, userId)
+      }
       $rootScope.modal.hide()
       $rootScope.subCategoryModal.hide()
       console.log('Deleting item id: ' + id + ' from ' + category)
+    },
+    subtractFromIncome: function (obj, userId) {
+      var budgetTrackerIncomeTotalRef = new Firebase(FIREBASE_URL + 'users/' + userId + '/budgettracker/incometotal')
+      // increment the income total
+      var newIncomeTotal = $rootScope.currentUser.budgettracker.incometotal.total - obj.value
+      budgetTrackerIncomeTotalRef.set({
+        total: newIncomeTotal,
+        date: Firebase.ServerValue.TIMESTAMP
+      })
+      $rootScope.data.incomeTotal = newIncomeTotal
+      //  update balance
+      var balanceValue = $rootScope.data.incomeTotal - $rootScope.data.expenseTotal
+      $rootScope.data.balance = balanceValue
+    },
+    subtractFromExpense: function (obj, userId) {
+      var budgetTrackerExpenseTotalRef = new Firebase(FIREBASE_URL + 'users/' + userId + '/budgettracker/expensetotal')
+      var newExpenseTotal = $rootScope.currentUser.budgettracker.expensetotal.total - obj.value
+      budgetTrackerExpenseTotalRef.set({
+        total: newExpenseTotal,
+        date: Firebase.ServerValue.TIMESTAMP
+      })
+      $rootScope.data.expenseTotal = newExpenseTotal
+      //  update balance
+      var balanceValue = $rootScope.data.incomeTotal - $rootScope.data.expenseTotal
+      $rootScope.data.balance = balanceValue
+
+      //  subtract from category list node
+      var budgetTrackerCategoryExpenseRef = new Firebase(FIREBASE_URL + 'users/' + userId + '/budgettracker/categories/expense/' + obj.category)
     },
     showModal: function (title, userId) {
       title = title.toLowerCase()
@@ -714,8 +747,8 @@ myApp.controller('AppController', ['$scope', 'Authentication', 'BudgetTracker', 
       $scope.getExpenseItemList = function (item) {
         BudgetTracker.getExpenseItemList(currentUserId, item)
       }
-      $scope.deleteItem = function (category, id) {
-        BudgetTracker.deleteItem(currentUserId, category, id)
+      $scope.deleteItem = function (category, obj, id) {
+        BudgetTracker.deleteItem(currentUserId, category, obj, id)
       }
     } // if authUser===========================================================
   })
