@@ -1,6 +1,6 @@
 # Budget Tracker Application
 
-This mobile application helps to keep track of you daily budget goals.
+This mobile application helps to keep track of you daily budget goals.  Built with Ionic framework with Firebase for the backend database.  Ng-Cordova is added for future features like local storage.  I've added the Android platform to build native application.  You can add the iOS platform to tryout the application on your iPhones.  But I don't have any plans for building the app for iOS since I don't own an iPhone.
 
 ## Features
 * User registration
