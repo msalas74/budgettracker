@@ -489,8 +489,17 @@ myApp.factory('BudgetTracker', ['$rootScope', '$location', 'Authentication', 'Lo
       var balanceValue = $rootScope.data.incomeTotal - $rootScope.data.expenseTotal
       $rootScope.data.balance = balanceValue
 
-      //  subtract from category list node
-      var budgetTrackerCategoryExpenseRef = new Firebase(FIREBASE_URL + 'users/' + userId + '/budgettracker/categories/expense/' + obj.category)
+      //  update expense group total value
+      var budgetTrackerExpenseCategoryRef = new Firebase(FIREBASE_URL + 'users/' + userId + '/budgettracker/categories/expense/' + obj.category)
+
+      budgetTrackerExpenseCategoryRef.once('value', function (snapshot) {
+        var data = snapshot.val()
+        budgetTrackerExpenseCategoryRef.set({
+          name: obj.category,
+          totalValue: data.totalValue - obj.value,
+          date: Firebase.ServerValue.TIMESTAMP
+        })
+      })
     },
     showModal: function (title, userId) {
       title = title.toLowerCase()
