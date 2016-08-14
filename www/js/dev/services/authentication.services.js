@@ -41,6 +41,7 @@ myApp.factory('Authentication', ['$rootScope', 'Loader', '$location', '$firebase
           $ionicHistory.nextViewOptions({
             disableBack: true
           })
+          return 'You are currently logged in.'
         }).catch(function (error) {
           Loader.hideLoading()
           $rootScope.data.message = error.message
