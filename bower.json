@@ -6,8 +6,6 @@
     "angular-mocks": "1.5.3"
   },
   "dependencies": {
-    "angular-nvd3": "^1.0.8",
-    "firebase": "^3.2.1",
-    "angularfire": "^2.0.1"
+    "angular-nvd3": "^1.0.8"
   }
 }
