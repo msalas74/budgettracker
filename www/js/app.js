@@ -149,6 +149,7 @@ myApp.factory('Authentication', ['$rootScope', 'Loader', '$location', '$firebase
           $ionicHistory.nextViewOptions({
             disableBack: true
           })
+          return 'You are currently logged in.'
         }).catch(function (error) {
           Loader.hideLoading()
           $rootScope.data.message = error.message
@@ -371,11 +372,26 @@ myApp.factory('BudgetTracker', ['$rootScope', '$location', 'Authentication', 'Lo
       Loader.hideLoading()
     },
     getExpenseCategories: function (userId) {
+      var expenseListArray = []
       //  list expense category groups
       var budgetTrackerCategoryExpenseRef = new Firebase(FIREBASE_URL + 'users/' + userId + '/budgettracker/categories/expense')
-      var budgetTrackerCategoryExpense = $firebaseArray(budgetTrackerCategoryExpenseRef)
-      $rootScope.data.expenses = budgetTrackerCategoryExpense
-      return budgetTrackerCategoryExpense
+      //var budgetTrackerCategoryExpense = $firebaseArray(budgetTrackerCategoryExpenseRef)
+      //$rootScope.data.expenses = budgetTrackerCategoryExpense
+
+      budgetTrackerCategoryExpenseRef.once('value', function (snapshot) {
+        snapshot.forEach(function (data) {
+          if (data.val().totalValue > 0) {
+            expenseListArray.push({
+              id: data.key(),
+              name: data.val().name,
+              totalValue: data.val().totalValue
+            })
+          }
+        })
+      })
+      //return budgetTrackerCategoryExpense
+      console.log(expenseListArray)
+      return expenseListArray
     },
     getExpenseTotal: function () {
       //  expense total
@@ -494,12 +510,17 @@ myApp.factory('BudgetTracker', ['$rootScope', '$location', 'Authentication', 'Lo
 
       budgetTrackerExpenseCategoryRef.once('value', function (snapshot) {
         var data = snapshot.val()
+        var sum = null
+        sum = data.totalValue - obj.value
         budgetTrackerExpenseCategoryRef.set({
           name: obj.category,
-          totalValue: data.totalValue - obj.value,
+          totalValue: sum,
           date: Firebase.ServerValue.TIMESTAMP
         })
       })
+
+      // update list of subcategory totals
+      budgetObj.getExpenseCategories(userId)
     },
     showModal: function (title, userId) {
       title = title.toLowerCase()
@@ -759,7 +780,7 @@ myApp.controller('AppController', ['$scope', 'Authentication', 'BudgetTracker', 
       $scope.deleteItem = function (category, obj, id) {
         BudgetTracker.deleteItem(currentUserId, category, obj, id)
       }
-    } // if authUser===========================================================
+    } // if authUser==========================================================
   })
 }])
 

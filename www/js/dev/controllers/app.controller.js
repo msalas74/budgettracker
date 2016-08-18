@@ -35,6 +35,6 @@ myApp.controller('AppController', ['$scope', 'Authentication', 'BudgetTracker', 
       $scope.deleteItem = function (category, obj, id) {
         BudgetTracker.deleteItem(currentUserId, category, obj, id)
       }
-    } // if authUser===========================================================
+    } // if authUser==========================================================
   })
 }])
