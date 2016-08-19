@@ -32,7 +32,7 @@ Clone the repo and run npm install.  Type ionic serve to run the app in a browse
 * Loader icons while app is retrieving data from server. (Completed 8-1-16)
 * Upgrade Firebase from 2.2.4 to latest version.
 * Add Test (Jasmine, Karma, and angular-mocks)
-* Edit and Delete method.
+* Edit and Delete method. *Status 8-18-16* Delete method working.  Need to add Edit/Update method.
 * Sorting list method.
 * Establish method for saving data to local storage.
  
