@@ -17,7 +17,7 @@
 }
 
 .splash_title {
-  color: white;
+  color: #3E5375;
   padding-top: 5rem;
   margin: 1.5rem auto;
   font-size: 3rem;
@@ -30,7 +30,7 @@
 }
 
 .get_started {
-  margin-top:2rem;
+  margin-top:30vh;
 }
 
 .bar-footer .title {
