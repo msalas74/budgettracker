@@ -26,6 +26,10 @@ var myApp = angular.module('btApp', ['ionic', 'nvd3', 'firebase', 'ngCordova'])
   $stateProvider
     .state('index', {
       url: '/',
+      templateUrl: 'templates/landing.html'
+    })
+    .state('login', {
+      url: '/login',
       templateUrl: 'templates/login.html'
     })
     .state('register', {

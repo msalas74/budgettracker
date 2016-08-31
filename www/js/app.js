@@ -26,6 +26,10 @@ var myApp = angular.module('btApp', ['ionic', 'nvd3', 'firebase', 'ngCordova'])
   $stateProvider
     .state('index', {
       url: '/',
+      templateUrl: 'templates/landing.html'
+    })
+    .state('login', {
+      url: '/login',
       templateUrl: 'templates/login.html'
     })
     .state('register', {
@@ -140,7 +144,7 @@ myApp.factory('Authentication', ['$rootScope', 'Loader', '$location', '$firebase
           email: user.email,
           password: user.password
         }).then(function (regUser) {
-          //  $ionicNavBarDelegate.showBackButton(false)
+          $ionicNavBarDelegate.showBackButton(false)
           Loader.hideLoading()
           $location.path('/app')
           $rootScope.data.message = 'You are currently logged in.'
