@@ -17,17 +17,16 @@
 .splash_title {
   color: white;
   padding-top: 5rem;
-  margin: 6rem auto;
+  margin: 1.5rem auto;
 }
 
 .description {
   font-size: 1.5rem;
-  margin-bottom: 25%;
   padding: 2rem;
 }
 
 .get_started {
-  margin: 4.5rem auto;
+  margin-top:2rem;
 }
 
 .bar-footer .title {
