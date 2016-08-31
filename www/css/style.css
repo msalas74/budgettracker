@@ -1,5 +1,7 @@
 /* Empty. Add your own CSS if you like */
 
+@import 'https://fonts.googleapis.com/css?family=Quattrocento';
+
 .splash {
   background: url("../img/Splash_Lrg.png") no-repeat center center fixed;
   -webkit-background-size: cover;
@@ -18,6 +20,8 @@
   color: white;
   padding-top: 5rem;
   margin: 1.5rem auto;
+  font-size: 3rem;
+  font-family: 'Quattrocento', serif;
 }
 
 .description {
