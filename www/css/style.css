@@ -73,6 +73,10 @@
 
   .splash_title {
     margin: 0.5rem auto;
-    font-size: 1.5rem; 
+    font-size: 1.8rem; 
+  }
+
+  .description {
+    padding: 0.8rem;
   }
 }
