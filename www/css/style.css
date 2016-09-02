@@ -68,6 +68,11 @@
   and (orientation: landscape) {
   
   .get_started {
-    margin-top:5vh;
+    margin-top:1vh;
+  }
+
+  .splash_title {
+    margin: 0.5rem auto;
+    font-size: 1.5rem; 
   }
 }
