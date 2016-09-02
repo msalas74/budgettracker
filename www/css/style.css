@@ -50,8 +50,8 @@
 
 /* Portrait */
 @media only screen 
-  and (min-device-width: 320px) 
-  and (max-device-width: 480px)
+  and (min-device-width: 360px) 
+  and (max-device-width: 640px)
   and (-webkit-min-device-pixel-ratio: 2)
   and (orientation: portrait) {
 
@@ -62,8 +62,8 @@
 
 /* Landscape */
 @media only screen 
-  and (min-device-width: 320px) 
-  and (max-device-width: 480px)
+  and (min-device-width: 360px) 
+  and (max-device-width: 640px)
   and (-webkit-min-device-pixel-ratio: 2)
   and (orientation: landscape) {
   
