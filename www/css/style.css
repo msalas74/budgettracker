@@ -32,7 +32,7 @@
 }
 
 .get_started {
-  margin-top:15vh;
+  margin-top:25vh;
 }
 
 .bar-footer .title {
@@ -46,4 +46,28 @@
 
 .footer-button {
   max-height: 31px;
+}
+
+/* Portrait */
+@media only screen 
+  and (min-device-width: 320px) 
+  and (max-device-width: 480px)
+  and (-webkit-min-device-pixel-ratio: 2)
+  and (orientation: portrait) {
+
+    .get_started {
+      margin-top:15vh;
+    }
+}
+
+/* Landscape */
+@media only screen 
+  and (min-device-width: 320px) 
+  and (max-device-width: 480px)
+  and (-webkit-min-device-pixel-ratio: 2)
+  and (orientation: landscape) {
+  
+  .get_started {
+    margin-top:5vh;
+  }
 }
