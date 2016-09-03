@@ -58,9 +58,9 @@
   and (orientation: portrait) {
 
     .get_started {
-      margin-top:15vh;
+      margin-top:12vh;
       font-size: 2rem;
-      padding: 1.5rem;
+      padding: 1.2rem;
     }
 }
 
@@ -74,7 +74,7 @@
   .get_started {
     margin-top:1vh;
     font-size: 2rem;
-    padding: 1.5rem;
+    padding: 1.2rem;
   }
 
   .splash_title {
