@@ -19,7 +19,7 @@
 
           <label class="item item-input">
             <span class="input-label">Password</span>
-            <input type="password" name="password" placeholder="Password" ng-model="user.password" ng-required="true" ng-minlength="8">
+            <input type="password" name="password" placeholder="Password must be 8 characters." ng-model="user.password" ng-required="true" ng-minlength="8">
           </label>
           <p class="item item-text-wrap item-assertive" ng-show="myform.password.$invalid && myform.password.$touched">Passwords must have at least 8 characters.</p>
           

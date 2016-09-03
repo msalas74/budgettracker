@@ -2,8 +2,15 @@
 
 @import 'https://fonts.googleapis.com/css?family=Quattrocento|Open+Sans+Condensed:300';
 
-body {
+.view-container {
   max-width: 640px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .splash {
@@ -42,17 +49,13 @@ body {
 }
 
 .bar-footer .title {
-  font-size: 40px;
-}
-
+  font-size: 2.2rem;
+} 
 
 .item-icon-left .icon, .item-icon-right .icon {
   font-size: 16px;
 }
 
-.footer-button {
-  max-height: 31px;
-}
 
 /* Portrait */
 @media only screen 
