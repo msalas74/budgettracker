@@ -2,10 +2,9 @@
 
 @import 'https://fonts.googleapis.com/css?family=Quattrocento|Open+Sans+Condensed:300';
 
-.view-container {
+.app_view {
   max-width: 640px;
   position: absolute;
-  top: 0;
   left: 0;
   right: 0;
   bottom: 0;
