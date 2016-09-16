@@ -101,13 +101,31 @@
 
 /* Landscape */
 @media only screen 
-  and (min-device-width: 360px) 
-  and (max-device-width: 640px)
+  and (min-device-width: 320px) 
+  and (max-device-width: 568px)
   and (-webkit-min-device-pixel-ratio: 2)
   and (orientation: landscape) {
   
+  .button.button-block, .button.button-full {
+    padding: 0;
+    margin: 0;
+  }
+  .row {
+    margin: 0;
+    padding: 0;
+  }
+}
+
+/* ----------- Galaxy S5 ----------- */
+
+/* Portrait and Landscape */
+@media screen 
+  and (device-width: 360px) 
+  and (device-height: 640px) 
+  and (-webkit-device-pixel-ratio: 3) {
+
   .get_started {
-    margin-top:0.5vh;
+    margin-top:40vh;
     font-size: 1.5rem;
   }
 
@@ -121,7 +139,38 @@
   }
 
   .getStartedPB {
-    height: 4rem;
+    height: 3rem;
+  }
+
+}
+
+/* Landscape */
+@media screen 
+  and (device-height: 360px) 
+  and (device-width: 640px) 
+  and (-webkit-device-pixel-ratio: 3) 
+  and (orientation: landscape) {
+  
+  .get_started {
+    margin-top:0.3vh;
+    font-size: 1.5rem;
+  }
+
+  .splash_title {
+    margin: 0.2rem auto;
+    font-size: 1.8rem; 
+  }
+
+  .description {
+    padding: 0.2rem;
+  }
+
+  .getStartedPB {
+    height: 1rem;
+  }
+
+  .row {
+    padding: 0;
   }
 }
 
@@ -177,6 +226,59 @@
   .getStartedPB {
     height: 4rem;
   } 
+
+}
+/* ----------- iPhone 6 ----------- */
+
+/* Portrait and Landscape */
+@media only screen 
+  and (min-device-width: 375px) 
+  and (max-device-width: 667px) 
+  and (-webkit-min-device-pixel-ratio: 2) { 
+
+  .get_started {
+    margin-top:40vh;
+    font-size: 1.5rem;
+  }
+
+  .splash_title {
+    margin: 0.2rem auto;
+    font-size: 1.8rem; 
+  }
+
+  .description {
+    padding: 0.8rem;
+  }
+
+  .getStartedPB {
+    height: 4rem;
+  } 
+}
+
+/* Landscape */
+@media only screen 
+  and (min-device-width: 375px) 
+  and (max-device-width: 667px) 
+  and (-webkit-min-device-pixel-ratio: 2)
+  and (orientation: landscape) {
+
+  .get_started {
+    margin-top:10vh;
+    font-size: 1.5rem;
+  }
+
+  .splash_title {
+    margin: 0.2rem auto;
+    font-size: 1.8rem; 
+  }
+
+  .description {
+    padding: 0.8rem;
+  }
+
+  .getStartedPB {
+    height: 4rem;
+  }  
 
 }
 
