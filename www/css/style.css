@@ -44,7 +44,7 @@
 .get_started {
   margin-top:25vh;
   font-size: 3rem;
-  padding: 1.5rem;
+  padding: 0;
 }
 
 .bar-footer .title {
@@ -53,6 +53,11 @@
 
 .item-icon-left .icon, .item-icon-right .icon {
   font-size: 16px;
+}
+
+/*  landing page Get Started button styles */
+.getStartedPB {
+  height: 6rem;
 }
 
 
@@ -70,6 +75,30 @@
     }
 }
 
+/* Portrait  iPhone 5*/
+@media only screen 
+  and (min-device-width: 320px) 
+  and (max-device-width: 568px)
+  and (-webkit-min-device-pixel-ratio: 2)
+  and (orientation: portrait) {
+    
+    .splash_title {
+      margin: 0.5rem auto;
+      font-size: 1.5rem; 
+    }
+    .get_started {
+      margin-top:7vh;
+      font-size: 2rem;
+    }
+    .description {
+      font-size: 0.6rem
+      padding: 0.6rem;
+    }
+    .getStartedPB {
+      height: 4rem;
+    }
+}
+
 /* Landscape */
 @media only screen 
   and (min-device-width: 360px) 
@@ -80,15 +109,96 @@
   .get_started {
     margin-top:0.5vh;
     font-size: 1.5rem;
-    padding: 0.5rem;
   }
 
   .splash_title {
-    margin: 0.5rem auto;
+    margin: 0.2rem auto;
     font-size: 1.8rem; 
   }
 
   .description {
     padding: 0.8rem;
   }
+
+  .getStartedPB {
+    height: 4rem;
+  }
+}
+
+/* ----------- iPhone 6+ ----------- */
+
+/* Portrait and Landscape */
+@media only screen 
+  and (min-device-width: 414px) 
+  and (max-device-width: 736px) 
+  and (-webkit-min-device-pixel-ratio: 3) {
+
+  .get_started {
+    margin-top:45vh;
+    font-size: 1.5rem;
+  }
+
+  .splash_title {
+    margin: 0.2rem auto;
+    font-size: 1.8rem; 
+  }
+
+  .description {
+    padding: 0.8rem;
+  }
+
+  .getStartedPB {
+    height: 4rem;
+  } 
+
+}
+
+/* Landscape */
+@media only screen 
+  and (min-device-width: 414px) 
+  and (max-device-width: 736px) 
+  and (-webkit-min-device-pixel-ratio: 3)
+  and (orientation: landscape) { 
+
+  .get_started {
+    margin-top:25vh;
+    font-size: 1.5rem;
+  }
+
+  .splash_title {
+    margin: 0.2rem auto;
+    font-size: 1.8rem; 
+  }
+
+  .description {
+    padding: 0.8rem;
+  }
+
+  .getStartedPB {
+    height: 4rem;
+  } 
+
+}
+
+/* ----------- Kindle Fire HDX" ----------- */
+
+/* Portrait and Landscape */
+@media only screen 
+  and (min-device-width: 1600px) 
+  and (max-device-width: 2560px) 
+  and (-webkit-min-device-pixel-ratio: 1.5) {
+
+    .get_started {
+      margin-top:50vh;
+      font-size: 2rem;
+    }
+
+    .description {
+      font-size: 2.5rem;
+    }
+
+    .splash_title {
+      font-size: 5rem;
+    }
+
 }
