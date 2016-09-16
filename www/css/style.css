@@ -188,17 +188,48 @@
   and (max-device-width: 2560px) 
   and (-webkit-min-device-pixel-ratio: 1.5) {
 
-    .get_started {
-      margin-top:50vh;
-      font-size: 2rem;
-    }
+  .get_started {
+    margin-top:50vh;
+    font-size: 2rem;
+  }
 
-    .description {
-      font-size: 2.5rem;
-    }
+  .description {
+    font-size: 1.7rem;
+  }
 
-    .splash_title {
-      font-size: 5rem;
-    }
+  .splash_title {
+    font-size: 5rem;
+  }
+
+  .getStartedPB {
+    height: 10rem;
+  } 
+
+}
+
+/* Landscape */
+@media only screen 
+  and (min-device-width: 1600px) 
+  and (max-device-width: 2560px) 
+  and (-webkit-min-device-pixel-ratio: 1.5) 
+  and (orientation: landscape) {
+
+  .get_started {
+    margin-top:50vh;
+    font-size: 2rem;
+  }
+
+  .description {
+    font-size: 2.5rem;
+  }
+
+  .splash_title {
+    font-size: 5rem;
+  }
+
+  .getStartedPB {
+    height: 10rem;
+  } 
+
 
 }
