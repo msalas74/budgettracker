@@ -28,6 +28,7 @@ Clone the repo and run npm install.  Type ionic serve to run the app in a browse
 
 ## TODO List
 
+* Create dummy log in account for users to test out the app.
 * Modal to list items in a category. (Completed 7-31-16)
 * Loader icons while app is retrieving data from server. (Completed 8-1-16)
 * Upgrade Firebase from 2.2.4 to latest version.
@@ -35,7 +36,7 @@ Clone the repo and run npm install.  Type ionic serve to run the app in a browse
 * Edit and Delete method. *Status 8-18-16* Delete method working.  Need to add Edit/Update method.
 * Sorting list method.
 * Establish method for saving data to local storage.
- 
+
 
 ## Authors
 
@@ -45,4 +46,3 @@ Clone the repo and run npm install.  Type ionic serve to run the app in a browse
 ## License
 
 This project is licensed under the ISC License - see the [LICENSE.md](LICENSE.md) file for details
-
