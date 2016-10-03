@@ -36,6 +36,7 @@ Clone the repo and run npm install.  Type ionic serve to run the app in a browse
 * Edit and Delete method. *Status 8-18-16* Delete method working.  Need to add Edit/Update method.
 * Sorting list method.
 * Establish method for saving data to local storage.
+* Change color scheme.
 
 
 ## Authors
